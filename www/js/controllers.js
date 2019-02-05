@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('fyp.controllers', [])
 
 .controller('DashCtrl', function($scope) {})
 
