@@ -1,0 +1,26 @@
+<ion-view hide-tabs view-title="InvenManage">
+    <ion-content class="padding">
+        <div class="card login-block">
+            <div class="item item-divider">
+                Please login
+            </div>
+            <div class="item item-text-wrap">
+                <div class="list bordered-block">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Username" name="username" ng-model="formUser.username">
+                    </label>
+                    <label class="item item-input">
+                        <input type="password" placeholder="Password" name="password" ng-model="formUser.password">
+                    </label>
+                </div>
+                <button class="button button-block button-positive" ng-click="userLogin()">
+                    Submit
+                </button>
+            </div>
+        </div>
+        <!-- <div class=""><i class="fas fa-plus-square"></i> Register </div> -->
+        <button class="button button-block button-balanced register-button" ng-click="goRegisterPage()">
+            <i class="fas fa-plus-square"></i> Register
+        </button>
+    </ion-content>
+</ion-view>

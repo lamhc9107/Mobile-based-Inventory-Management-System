@@ -1,1 +1,53 @@
-/* Empty. Add your own CSS if you like */
+.bordered-block{
+    border: 1px #ddd solid
+}
+
+/* .tab-nav, .tabs{
+    display: none !important; 
+} */
+.back-button{
+    float: right;
+    color: white;
+    font-weight: 300;
+}
+
+.title-bar{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+    color: white;
+    /* background: linear-gradient(to right, #32a4ff , white); */
+    background: #32a4ff;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.login-block{
+    margin-left: 10% !important;
+    margin-right: 10% !important;
+    margin-top: 10% !important;
+}
+
+.register-button{
+    /* text-align: right; */
+    margin:auto;
+    display: auto;
+    width: 70% !important;
+    text-align: center;
+    font-size: 17px;
+    color: #68a568;
+}
+
+.function-card{
+    height: 4rem;
+    border-radius: 15px;
+    padding: 5%;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white
+}
+
+#inventory-management-card{
+    background: #9cef9c;
+}

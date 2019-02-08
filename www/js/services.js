@@ -1,5 +1,7 @@
 angular.module('fyp.services', [])
 
+
+
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array
 
@@ -47,4 +49,15 @@ angular.module('fyp.services', [])
       return null;
     }
   };
+})
+.directive('hideTabs', function($rootScope) {
+  return {
+  restrict: 'A',
+  link: function($scope, $el) {
+      $rootScope.hideTabs = 'tabs-item-hide';
+      $scope.$on('$destroy', function() {
+          $rootScope.hideTabs = '';
+      });
+  }
+ };
 });
