@@ -3,7 +3,7 @@ angular.module('fyp.menuController', [])
     .controller('MenuCtrl', function ($scope, $ionicPopup, $state, $location) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
-        $scope.testUser = { username: 'test123', password: 'test123'};
+        $scope.testUser = { username: 'test123', password: 'test123' };
         $scope.userLogin = function (username, password) {
             console.log("User login request");
             checkUserLogin();
@@ -25,21 +25,24 @@ angular.module('fyp.menuController', [])
             }
         }
 
-        $scope.functinoCardClick = function(functionCard){
-            console.log(functionCard.target.id+ " clicked !")
-            switch(functionCard.target.id) {
+        $scope.functinoCardClick = function (functionCard) {
+            console.log(functionCard.target.id + " clicked !")
+            switch (functionCard.target.id) {
                 case "inventory-management-card":
-                  $state.go('tab.inventoryManage');
-                  break;
-                case "user-management-card":
-                  $state.go('tab.userManage');
-                  break;
+                    $state.go('tab.inventoryManage');
+                    break;
+                case "order-card":
+                    $state.go('tab.order');
+                    break;
+                case "user-manage-card":
+                    $state.go('tab.userManage');
+                    break;
                 default:
-                  console.log("Wrong function card id !")
-              }
+                    console.log("Wrong function card id !")
+            }
         }
 
-        $scope.goRegisterPage = function (){
+        $scope.goRegisterPage = function () {
             console.log("Go register page")
             $state.go('tab.register');
         }

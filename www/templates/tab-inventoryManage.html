@@ -1,5 +1,74 @@
 <ion-view view-title="InvenManage">
   <ion-content>
-    <div class="title-bar">Inventory Management <span class="back-button" ng-click="back()"><i class="fas fa-chevron-left"></i> Back</span></div>
+    <div class="title-bar" id="inventory-management-card">Inventory Management
+      <span class="back-button" ng-click="back()">
+        <i class="fas fa-chevron-left"></i> Back</span>
+    </div>
+    <div class="button-group">
+      <div class="row employeeOnlyFunction">
+        <div class="col">
+          <button class="button button-calm centered" style="width: 90%;">
+            Create Inventory
+          </button>
+        </div>
+        <div class="col">
+          <button class="button button-calm centered" style="width: 90%;">
+            Delete Inventory
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button class="button button-calm centered" style="width: 90%;">
+            Find (QR code)
+          </button>
+        </div>
+        <div class="col">
+          <button class="button button-calm centered" style="width: 90%;">
+            Find (Id)
+          </button>
+        </div>
+      </div>
+
+      <div class="list-area centered">
+        <div class="row" style="font-weight:bold; background: #1176f3; color: white">
+          <div class='col'>Item Id</div>
+          <div class='col'>Inventory</div>
+          <div class='col'></div>
+          <div class='col'></div>
+        </div>
+        <div class="row inventory-item" ng-repeat="inventory in inventoryList">
+          <div class="row">
+            <div class='col'>{{inventory.itemId}}</div>
+            <div class='col'>{{inventory.iName}}</div>
+            <div class='col'>
+              <button class="button button-outline button-positive tight-line-button" ng-click="showInventoryPopup(inventory)">
+                Detail
+              </button>
+            </div>
+            <div class='col'>
+              <button class="button button-outline button-positive tight-line-button">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bar bar-footer user-info-footer">
+      <div class="row">
+        <div class='col'>
+          <b>Welcome ! </b>{{testUser.username}}</div>
+        <div class='col'>
+          <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
   </ion-content>
 </ion-view>

@@ -1,0 +1,58 @@
+<ion-view view-title="InvenManage">
+        <ion-content>
+          <div class="title-bar" id="order-card">Orders
+            <span class="back-button" ng-click="back()">
+              <i class="fas fa-chevron-left"></i> Back</span>
+          </div>
+          <div class="button-group">
+      
+            <div class="row">
+              <div class="col employeeOnlyFunction">
+                <button class="button button-royal centered" style="width: 90%;">
+                  Find Order
+                </button>
+              </div>
+              <div class="col">
+                <button class="button button-royal centered" style="width: 90%;">
+                  Cancel Order
+                </button>
+              </div>
+            </div>
+      
+            <div class="list-area centered">
+              <div class="row" style="font-weight:bold; background: #c99bf3; color: white">
+                <div class='col'>Order Id</div>
+                <div class='col'>Item</div>
+                <div class='col'>Quantity</div>
+                <div class='col'></div>
+              </div>
+              <div class="row inventory-item" ng-repeat="order in orderList">
+                <div class="row">
+                  <div class='col'>{{order.orderId}}</div>
+                  <div class='col'>{{order.iName}}</div>
+                  <div class='col'>{{order.quantity}}</div>
+                  <div class='col'>
+                    <button class="button button-outline button-royal tight-line-button" ng-click="showOrderPopup(order)">
+                      Detail
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+          </div>
+      
+          <div class="bar bar-footer user-info-footer">
+            <div class="row">
+              <div class='col'>
+                <b>Welcome ! </b>{{testUser.username}}</div>
+              <div class='col'>
+                <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+      
+        </ion-content>
+      </ion-view>

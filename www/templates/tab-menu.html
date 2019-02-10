@@ -2,18 +2,33 @@
   <ion-content>
 
     <div class="title-bar">Menu </div>
+    <div class="card function-card" id="user-profile-card" ng-click="functionCardClick($event)">
+      Profile
+    </div>
     <div class="card function-card" id="inventory-management-card" ng-click="functinoCardClick($event)">
-      Inventory Management
+      Inventories
     </div>
-    <div class="card function-card" id="inventory-management-card">
-      Inventory Management
+    <div class="card function-card" id="order-card" ng-click="functinoCardClick($event)">
+      Orders
     </div>
-    <div class="card function-card" id="inventory-management-card">
-      Inventory Management
+    <div class="card function-card" id="user-manage-card" ng-click="functionCardClick($event)">
+      Users
     </div>
-    <div class="card function-card" id="inventory-management-card">
-      Inventory Management
+    <div class="card function-card" id="message-card" ng-click="functionCardClick($event)">
+      Messages
     </div>
-    
+
+    <div class="bar bar-footer user-info-footer">
+      <div class="row">
+        <div class='col'>
+          <b>Welcome ! </b>{{testUser.username}}</div>
+        <div class='col'>
+          <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
   </ion-content>
 </ion-view>

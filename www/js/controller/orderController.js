@@ -1,19 +1,19 @@
-angular.module('fyp.inventoryManageController', [])
+angular.module('fyp.orderController', [])
 
-    .controller('InventoryManageCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal) {
+    .controller('OrderCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
-        $scope.inventoryList = [];
-        $scope.testInventory = { itemId: '000001', productId: '000001', iName: 'testInventory', checkInTime: '2019-01-25T12:00:00Z', distance: '33.2', status: 'Available',price:'30'}
+        $scope.orderList = [];
+        $scope.testOrder = { orderId: '000001', itemId: '000001', productId: '000001', iName: 'testInventory', checkOutTime: '2019-01-25T13:00:00Z', status: 'Ready to be delivered', price: '30', quantity: '4' }
         $scope.userLogin = function (username, password) {
             console.log("User login request");
             checkUserLogin();
             console.log("Username: " + $scope.formUser.username + ", Password: " + $scope.formUser.password)
         }
-        $scope.inventoryList.push($scope.testInventory);
+        $scope.orderList.push($scope.testOrder);
 
-        console.log($scope.inventoryList)
+        console.log($scope.orderList)
 
         $scope.logout = function () {
             $state.go('tab.login');
@@ -23,13 +23,12 @@ angular.module('fyp.inventoryManageController', [])
             $state.go('tab.menu');
         }
 
-        $scope.showInventoryPopup = function (inventory) {
+        $scope.showOrderPopup = function (order) {
             $scope.data = {}
-            inventoryPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">ItemId </div> <div class="col">' + inventory.itemId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">ProductId</div><div class="col"> ' + inventory.productId + '</div></div> <div class="row"><div class="col" style="font-weight:bold"> Check-in time </div> <div class="col"> ' + moment(inventory.checkInTime).format('MMMM Do YYYY, h:mm:ss a') + '</div></div><div class="row"><div class="col" style="font-weight:bold">Distance </div> <div class="col">' + inventory.distance + ' m</div></div>'
+            orderPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">ItemId </div> <div class="col">' + order.itemId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">Quantity</div><div class="col"> ' + order.quantity + '</div></div><div class="row"><div class="col" style="font-weight:bold">total price </div> <div class="col">$' + order.price*order.quantity + '</div></div> <div class="row"><div class="col" style="font-weight:bold"> Order time </div> <div class="col"> ' + moment(order.checkOutTime).format('MMMM Do YYYY, h:mm:ss a') + '</div></div><div class="row"><div class="col" style="font-weight:bold">Status </div> <div class="col">' + order.status + ' </div></div>'
             var myPopup = $ionicPopup.show({
-                //templateUrl: 'templates/popup/inventory-popup.html',
-                template: inventoryPopupTemplate,
-                title: inventory.iName,
+                template: orderPopupTemplate,
+                title: "Order #" + order.orderId,
                 //subTitle: 'Subtitle',
                 scope: $scope,
 

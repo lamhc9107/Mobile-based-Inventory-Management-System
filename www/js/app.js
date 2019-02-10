@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginController', 'fyp.registerController','fyp.menuController','fyp.inventoryManageController'])
+angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginController', 'fyp.registerController','fyp.menuController','fyp.inventoryManageController','fyp.orderController','fyp.userManageController'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -79,6 +79,24 @@ angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginCon
           'tab-register': {
             templateUrl: 'templates/tab-register.html',
             controller: 'RegisterCtrl'
+          }
+        }
+      })
+      .state('tab.order', {
+        url: '/order',
+        views: {
+          'tab-order': {
+            templateUrl: 'templates/tab-order.html',
+            controller: 'OrderCtrl'
+          }
+        }
+      })
+      .state('tab.userManage', {
+        url: '/userManage',
+        views: {
+          'tab-userManage': {
+            templateUrl: 'templates/tab-userManage.html',
+            controller: 'UserManageCtrl'
           }
         }
       })

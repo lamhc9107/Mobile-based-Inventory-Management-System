@@ -2,6 +2,14 @@
     border: 1px #ddd solid
 }
 
+ion-content, .scroll-content, .scroll{
+    bottom: 0 !important
+}
+
+.scroll{
+    transform:initial  !important;
+}
+
 /* .tab-nav, .tabs{
     display: none !important; 
 } */
@@ -11,6 +19,13 @@
     font-weight: 300;
 }
 
+.centered{
+    display: block;
+    margin: auto;
+}
+.button-group{
+    padding: 2%;
+}
 .title-bar{
     padding-top: 2%;
     padding-bottom: 2%;
@@ -18,7 +33,7 @@
     padding-right: 5%;
     color: white;
     /* background: linear-gradient(to right, #32a4ff , white); */
-    background: #32a4ff;
+    background: #777777;
     font-size: 1.2rem;
     font-weight: bold;
 }
@@ -49,5 +64,66 @@
 }
 
 #inventory-management-card{
-    background: #9cef9c;
+    background: #1176f3 !important;
+}
+#user-profile-card{
+    background: #45b9ae !important;
+}
+#order-card{
+    background: #c99bf3 !important;
+}
+#message-card{
+    background: #d8c66f !important;
+}
+
+.list-area{
+    min-height: 390px;
+    width: 95%;
+    margin-top: 1%;
+    -webkit-box-shadow: inset 0px 0px 41px 7px rgba(194,194,194,0.28);
+    -moz-box-shadow: inset 0px 0px 41px 7px rgba(194,194,194,0.28);
+    box-shadow: inset 0px 0px 41px 7px rgba(194,194,194,0.28);
+    border-radius: 10px;
+    border: solid #e4e4e4 1px;
+    overflow: scroll;
+    /* padding-left:3%; */
+    /* padding-right:3%; */
+}
+.list-area div{
+    text-align: center;
+}
+
+.inventory-item{
+    border-bottom: dashed 1px grey;
+    padding-top: 2% !important;
+    padding-bottom: 2% !important;
+}
+
+.tight-line-button{
+    line-height: 18px !important;
+    min-height: 20px !important;
+    font-size: 0.95em;
+}
+
+.popup{
+    width: 90% !important;
+    /* height: 70% !important; */
+}
+
+.tabs{
+    display: none !important;
+}
+
+.float-right-button{
+    right: 4%;
+    position: absolute;
+}
+.user-info-footer{
+    background: #777777;
+    color: white;
+}
+
+.button-order{
+    background: #9262bd;
+    color: white;
 }
