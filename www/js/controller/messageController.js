@@ -1,6 +1,6 @@
-angular.module('fyp.userManageController', [])
+angular.module('fyp.messageController', [])
 
-    .controller('UserManageCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal) {
+    .controller('MessageCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { userId: '000001', username: 'test123', password: 'test123', role: 'Manager' };

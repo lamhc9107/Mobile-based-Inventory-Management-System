@@ -5,10 +5,10 @@
     <div class="card function-card" id="user-profile-card" ng-click="functionCardClick($event)">
       Profile
     </div>
-    <div class="card function-card" id="inventory-management-card" ng-click="functinoCardClick($event)">
+    <div class="card function-card" id="inventory-management-card" ng-click="functionCardClick($event)">
       Inventories
     </div>
-    <div class="card function-card" id="order-card" ng-click="functinoCardClick($event)">
+    <div class="card function-card" id="order-card" ng-click="functionCardClick($event)">
       Orders
     </div>
     <div class="card function-card" id="user-manage-card" ng-click="functionCardClick($event)">
@@ -20,8 +20,8 @@
 
     <div class="bar bar-footer user-info-footer">
       <div class="row">
-        <div class='col'>
-          <b>Welcome ! </b>{{testUser.username}}</div>
+        <div class='col-75'>
+          <b>Welcome ! </b>{{testUser.username}} (Manager)</div>
         <div class='col'>
           <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
             Logout

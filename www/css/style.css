@@ -1,5 +1,11 @@
 .bordered-block{
-    border: 1px #ddd solid
+    border: 1px #ddd solid;
+}
+.scroll-content{
+    background: url("../img/background1.jpg") !important;
+    background-size: cover;
+    /* filter: blur(8px);
+    -webkit-filter: blur(8px); */
 }
 
 ion-content, .scroll-content, .scroll{
@@ -75,6 +81,13 @@ ion-content, .scroll-content, .scroll{
 #message-card{
     background: #d8c66f !important;
 }
+#user-manage-card{
+    background: #ef473a !important;
+}
+
+#message-card{
+    background: #ff9900 !important;
+}
 
 .list-area{
     min-height: 390px;
@@ -86,6 +99,7 @@ ion-content, .scroll-content, .scroll{
     border-radius: 10px;
     border: solid #e4e4e4 1px;
     overflow: scroll;
+    background: white;
     /* padding-left:3%; */
     /* padding-right:3%; */
 }

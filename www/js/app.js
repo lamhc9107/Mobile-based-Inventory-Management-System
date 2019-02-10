@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginController', 'fyp.registerController','fyp.menuController','fyp.inventoryManageController','fyp.orderController','fyp.userManageController'])
+angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginController', 'fyp.registerController','fyp.menuController','fyp.inventoryManageController','fyp.orderController','fyp.userManageController','fyp.messageController'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -44,15 +44,16 @@ angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginCon
 
       // Each tab has its own nav history stack:
 
-      .state('tab.dash', {
-        url: '/dash',
+      .state('tab.message', {
+        url: '/message',
         views: {
-          'tab-dash': {
-            templateUrl: 'templates/tab-dash.html',
-            controller: 'DashCtrl'
+          'tab-message': {
+            templateUrl: 'templates/tab-message.html',
+            controller: 'MessageCtrl'
           }
         }
       })
+      
 
       .state('tab.menu', {
         url: '/menu',
@@ -91,6 +92,7 @@ angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginCon
           }
         }
       })
+      
       .state('tab.userManage', {
         url: '/userManage',
         views: {

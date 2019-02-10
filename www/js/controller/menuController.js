@@ -25,7 +25,12 @@ angular.module('fyp.menuController', [])
             }
         }
 
-        $scope.functinoCardClick = function (functionCard) {
+        $scope.logout = function () {
+            $state.go('tab.login');
+        }
+
+
+        $scope.functionCardClick = function (functionCard) {
             console.log(functionCard.target.id + " clicked !")
             switch (functionCard.target.id) {
                 case "inventory-management-card":
@@ -36,6 +41,9 @@ angular.module('fyp.menuController', [])
                     break;
                 case "user-manage-card":
                     $state.go('tab.userManage');
+                    break;
+                case "message-card":
+                    $state.go('tab.message');
                     break;
                 default:
                     console.log("Wrong function card id !")
