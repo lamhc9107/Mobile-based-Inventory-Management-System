@@ -8,13 +8,13 @@
   
         <div class="row">
           <div class="col employeeOnlyFunction">
-            <button class="button button-assertive centered" style="width: 90%;">
+            <button class="button button-assertive centered" style="width: 90%;" ng-click="findUser()">
               Find User
             </button>
           </div>
           <div class="col">
-            <button class="button button-assertive centered" style="width: 90%;">
-              Delete User
+            <button class="button button-assertive centered" style="width: 90%;" ng-click="createUser()"> 
+              Create User
             </button>
           </div>
         </div>
@@ -45,7 +45,7 @@
       <div class="bar bar-footer user-info-footer">
         <div class="row">
           <div class='col-75'>
-            <b>Welcome ! </b>{{testUser.username}} (Manager)</div>
+            <b>Welcome ! </b>{{currentUser.username}} (Manager)</div>
           <div class='col'>
             <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
               Logout

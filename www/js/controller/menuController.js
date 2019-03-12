@@ -1,33 +1,40 @@
 angular.module('fyp.menuController', [])
 
-    .controller('MenuCtrl', function ($scope, $ionicPopup, $state, $location) {
+    .controller('MenuCtrl', function ($scope, $ionicPopup, $state, $location, $localStorage) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
-        $scope.userLogin = function (username, password) {
-            console.log("User login request");
-            checkUserLogin();
-            console.log("Username: " + $scope.formUser.username + ", Password: " + $scope.formUser.password)
-        }
 
-        function checkUserLogin() {
-            if ($scope.formUser.username.length < 5) {
-                console.log("Invaild Login !")
-                loginInvaildDesc = "Username should be at least 5 character ! Please try again !"
-                $scope.loginInvaildAlert();
-                return;
+        function functionCardHide(){
+            switch ($scope.currentUser.role) {
+                case "customer":
+                    $("#user-manage-card").hide();
+                    $("#inventory-management-card").hide();
+                    break;
+                default:
+                    
             }
 
-            if ($scope.formUser.password.length < 5) {
-                loginInvaildDesc = "Password should be at least 6 character ! Please try again !"
-                $scope.loginInvaildAlert();
-                return;
+        }
+        
+
+        $scope.storageInit = function(){
+            if($localStorage.currentUser == undefined){
+                $state.go('tab.login');
             }
+            $scope.$storage = $localStorage;
+            $scope.currentUser = $scope.$storage.currentUser;
+            console.log($scope.currentUser);
         }
 
+        $scope.storageInit();
+        functionCardHide();
         $scope.logout = function () {
+            delete $localStorage.currentUser;
             $state.go('tab.login');
         }
+
+
 
 
         $scope.functionCardClick = function (functionCard) {
