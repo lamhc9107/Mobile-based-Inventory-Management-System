@@ -73,6 +73,78 @@ angular.module('fyp.services', [])
         }, function myError(response) {
 
         })
+      },
+      getInventoryList: function () {
+        return $http({
+          method: "GET",
+          url: apiUrl + "inventories",
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          }
+        }).then(function mySucces(response) {
+          // console.log(response);
+          return response;
+        }, function myError(response) {
+
+        })
+      },
+      getInventoryById: function (_itemId) {
+        return $http({
+          method: "GET",
+          url: apiUrl + "inventories/" + _itemId,
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          }
+        }).then(function mySucces(response) {
+          // console.log(response);
+          return response;
+        }, function myError(response) {
+
+        })
+      },
+      createNewInventory: function (createInventoryform, nextItemId) {
+        console.log(nextItemId);
+        return $http({
+          method: "POST",
+          url: apiUrl + "inventories",
+          // withCredentials: true,
+          data: {
+            userId: nextItemId,
+            productId: createInventoryform.productId,
+            iName: createInventoryform.iName,
+            checkInTime: createInventoryform.checkInTime,
+            distance: createInventoryform.distance,
+            status: createInventoryform.status,
+            price: createInventoryform.price
+          },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(function mySucces(response) {
+          // console.log(response);
+          return response;
+        }, function myError(response) {
+
+        })
+      },
+      deleteUser: function (_itemId) {
+        console.log(_itemId);
+        return $http({
+          method: "DELETE",
+          url: apiUrl + "inventories",
+          // withCredentials: true,
+          data: {
+            userId: Number(_itemId),
+          },
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+          }
+        }).then(function mySucces(response) {
+          // console.log(response);
+          return response;
+        }, function myError(response) {
+
+        })
       }
     }
   })

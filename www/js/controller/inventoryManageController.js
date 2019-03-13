@@ -1,21 +1,46 @@
 angular.module('fyp.inventoryManageController', [])
 
-    .controller('InventoryManageCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal) {
+    .controller('InventoryManageCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal, apiService,$localStorage) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
         $scope.inventoryList = [];
+        var nextItemId ='';
         $scope.testInventory = { itemId: '000001', productId: '000001', iName: 'testInventory', checkInTime: '2019-01-25T12:00:00Z', distance: '33.2', status: 'Available',price:'30'}
         $scope.userLogin = function (username, password) {
             console.log("User login request");
             checkUserLogin();
             console.log("Username: " + $scope.formUser.username + ", Password: " + $scope.formUser.password)
         }
-        $scope.inventoryList.push($scope.testInventory);
+        getInventoryList();
 
-        console.log($scope.inventoryList)
+        function getInventoryList() {
+            apiService.getInventoryList().then(function (data) {
+                $scope.inventoryList = data.data.recordset;
+                console.log("User List: " + $scope.inventoryList);
+                console.log($scope.inventoryList);
+                for(var i = 0; i< $scope.inventoryList.length;i++){
+                    if($scope.inventoryList[i].item > nextItemId){
+                        nextItemId = $scope.inventoryList[i].itemId
+                    }
+                }
+                nextUserId = Number(nextItemId) +1;
+                console.log(nextItemId);
+            });
+        }
 
+        $scope.storageInit = function () {
+            if ($localStorage.currentUser == undefined) {
+                $state.go('tab.login');
+            }
+            $scope.$storage = $localStorage;
+            $scope.currentUser = $scope.$storage.currentUser;
+            console.log($scope.currentUser);
+        }
+
+        $scope.storageInit();
         $scope.logout = function () {
+            delete $localStorage.currentUser;
             $state.go('tab.login');
         }
 

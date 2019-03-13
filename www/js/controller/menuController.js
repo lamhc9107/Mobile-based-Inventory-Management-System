@@ -5,21 +5,21 @@ angular.module('fyp.menuController', [])
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
 
-        function functionCardHide(){
+        function functionCardHide() {
             switch ($scope.currentUser.role) {
                 case "customer":
                     $("#user-manage-card").hide();
                     $("#inventory-management-card").hide();
                     break;
                 default:
-                    
+
             }
 
         }
-        
 
-        $scope.storageInit = function(){
-            if($localStorage.currentUser == undefined){
+
+        $scope.storageInit = function () {
+            if ($localStorage.currentUser == undefined) {
                 $state.go('tab.login');
             }
             $scope.$storage = $localStorage;
@@ -51,6 +51,9 @@ angular.module('fyp.menuController', [])
                     break;
                 case "message-card":
                     $state.go('tab.message');
+                    break;
+                case "user-profile-card":
+                    $state.go('tab.profile');
                     break;
                 default:
                     console.log("Wrong function card id !")
