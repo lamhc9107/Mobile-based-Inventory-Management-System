@@ -1,0 +1,61 @@
+<ion-view view-title="InvenManage">
+    <ion-content>
+      <div class="title-bar" id="user-profile-card">User Profile
+        <span class="back-button" ng-click="back()">
+          <i class="fas fa-chevron-left"></i> Back</span>
+      </div>
+      <div class="card">
+          <div class="item item-divider user-profile-title-bar">
+              User Id: {{currentUser.userId}}
+            </div>
+        <div class="list">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Username</span>
+            <input type="text" placeholder="" ng-model="editUserform.username">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Old Password</span>
+            <input type="password" placeholder="" ng-model="editUserform.oldPassword">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">New Password</span>
+            <input type="password" placeholder="" ng-model="editUserform.newPassword">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Re-enter New Password</span>
+            <input type="password" placeholder=""  ng-model="editUserform.reNewRpassword">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">E-mail</span>
+            <input type="email" placeholder=""  ng-model="editUserform.email">
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+          <div class="col employeeOnlyFunction">
+            <button class="button user-profile-title-bar centered" style="width: 90%;" ng-click="resetEditUserForm()">
+              Reset
+            </button>
+          </div>
+          <div class="col">
+            <button class="button user-profile-title-bar centered" style="width: 90%;" ng-click="submitEditUserForm()"> 
+              Submit
+            </button>
+          </div>
+        </div>
+  
+      <div class="bar bar-footer user-info-footer">
+        <div class="row">
+          <div class='col-75'>
+            <b>Welcome ! </b>{{currentUser.username}} ({{currentUser.role}})</div>
+          <div class='col'>
+            <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+  
+    </ion-content>
+  </ion-view>

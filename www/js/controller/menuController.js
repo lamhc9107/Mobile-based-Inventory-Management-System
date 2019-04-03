@@ -6,15 +6,14 @@ angular.module('fyp.menuController', [])
         $scope.testUser = { username: 'test123', password: 'test123' };
 
         function functionCardHide() {
+            console.log($scope.currentUser.role)
             switch ($scope.currentUser.role) {
-                case "customer":
+                case "Customer":
                     $("#user-manage-card").hide();
-                    $("#inventory-management-card").hide();
+                    // $("#inventory-management-card").hide();
                     break;
                 default:
-
             }
-
         }
 
 
@@ -28,14 +27,12 @@ angular.module('fyp.menuController', [])
         }
 
         $scope.storageInit();
+        
         functionCardHide();
         $scope.logout = function () {
             delete $localStorage.currentUser;
             $state.go('tab.login');
         }
-
-
-
 
         $scope.functionCardClick = function (functionCard) {
             console.log(functionCard.target.id + " clicked !")
@@ -53,7 +50,7 @@ angular.module('fyp.menuController', [])
                     $state.go('tab.message');
                     break;
                 case "user-profile-card":
-                    $state.go('tab.profile');
+                    $state.go('tab.userProfile');
                     break;
                 default:
                     console.log("Wrong function card id !")
@@ -71,6 +68,10 @@ angular.module('fyp.menuController', [])
                 template: loginInvaildDesc
             });
         };
+
+        $scope.refresh = function(){
+            location.reload();
+        }
 
     })
 

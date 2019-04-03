@@ -7,7 +7,7 @@
     <div class="button-group">
       <div class="row employeeOnlyFunction">
         <div class="col">
-          <button class="button button-calm centered" style="width: 90%;">
+          <button class="button button-calm centered" style="width: 90%;" ng-click="createInventory()">
             Create Inventory
           </button>
         </div>
@@ -33,24 +33,29 @@
 
       <div class="list-area centered">
         <div class="row" style="font-weight:bold; background: #1176f3; color: white">
-          <div class='col'>Item Id</div>
           <div class='col'>Inventory</div>
+          <div class='col'>Status</div>
+          <div class='col'>Location</div>
           <div class='col'></div>
-          <div class='col'></div>
+          <!-- <div class='col'></div> -->
         </div>
-        <div class="row inventory-item" ng-repeat="inventory in inventoryList">
-          <div class="row">
-            <div class='col'>{{inventory.itemId}}</div>
-            <div class='col'>{{inventory.iName}}</div>
-            <div class='col'>
-              <button class="button button-outline button-positive tight-line-button" ng-click="showInventoryPopup(inventory)">
-                Detail
-              </button>
-            </div>
-            <div class='col'>
+        <div class="scroll-area">
+          <div class="row inventory-item" ng-repeat="inventory in inventoryList">
+            <div class="row">
+              <div class='col'>{{inventory.iName}}</div>
+              <div class='col'>{{inventory.status}}</div>
+              <div class='col'>{{inventory.Location}}</div>
+              <div class='col'>
+                <button class="button button-outline button-positive tight-line-button"
+                  ng-click="showInventoryPopup(inventory)">
+                  Detail
+                </button>
+              </div>
+              <!-- <div class='col'>
               <button class="button button-outline button-positive tight-line-button">
                 Delete
               </button>
+            </div> -->
             </div>
           </div>
         </div>

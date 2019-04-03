@@ -5,8 +5,8 @@ angular.module('fyp.inventoryManageController', [])
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
         $scope.inventoryList = [];
-        var nextItemId ='';
-        $scope.testInventory = { itemId: '000001', productId: '000001', iName: 'testInventory', checkInTime: '2019-01-25T12:00:00Z', distance: '33.2', status: 'Available',price:'30'}
+        var nextItemId = 0;
+        $scope.createInventoryForm = {productId:'',iName:'',checkInTime:'',distance:'',status:'', price:'', location:''};
         $scope.userLogin = function (username, password) {
             console.log("User login request");
             checkUserLogin();
@@ -16,15 +16,15 @@ angular.module('fyp.inventoryManageController', [])
 
         function getInventoryList() {
             apiService.getInventoryList().then(function (data) {
-                $scope.inventoryList = data.data.recordset;
-                console.log("User List: " + $scope.inventoryList);
+                $scope.inventoryList = data;
+                console.log("Inventory List: ");
                 console.log($scope.inventoryList);
                 for(var i = 0; i< $scope.inventoryList.length;i++){
-                    if($scope.inventoryList[i].item > nextItemId){
+                    if(Number($scope.inventoryList[i].itemId) > nextItemId){
                         nextItemId = $scope.inventoryList[i].itemId
                     }
                 }
-                nextUserId = Number(nextItemId) +1;
+                nextItemId = Number(nextItemId) +1;
                 console.log(nextItemId);
             });
         }
@@ -46,6 +46,54 @@ angular.module('fyp.inventoryManageController', [])
 
         $scope.back = function () {
             $state.go('tab.menu');
+        }
+
+        $scope.deleteInventory = function(itemId){
+            apiService.deleteItem(itemId).then(function (data) {
+                location.reload();
+            });
+
+        }
+
+        $scope.createInventory = function () {
+            userPopupTemplate = '<div class="list">' +
+                '<label class="item item-input item-stacked-label">' +
+                '<span class="input-label">ProductId</span>' +
+                '<input type="text" ng-model="createInventoryForm.productId" placeholder="">' +
+                '</label>' +
+                '<label class="item item-input item-stacked-label">' +
+                '<span class="input-label">Item Name</span>' +
+                '<input type="text" ng-model="createInventoryForm.iName" placeholder="">' +
+                '</label>' +
+                '<label class="item item-input item-stacked-label">' +
+                '<span class="input-label">Price</span>' +
+                '<input type="text" ng-model="createInventoryForm.price" placeholder="">' +
+                '</label>' +
+                '<label class="item item-input item-stacked-label">' +
+                '<span class="input-label">Location</span>' +
+                '<input type="text" ng-model="createInventoryForm.location" placeholder="">' +
+                '</label>' +
+                '</div>'
+            var myPopup = $ionicPopup.show({
+                template: userPopupTemplate,
+                title: "Create new inventory",
+                //subTitle: 'Subtitle',
+                scope: $scope,
+
+                buttons: [
+                    { text: 'Cancel' }, {
+                        text: '<b>Submit</b>',
+                        type: 'button-positive',
+                        onTap: function (e) {
+                            console.log($scope.createInventoryForm);
+                            apiService.createNewInventory($scope.createInventoryForm, nextItemId).then(function (data) {
+                                console.log("Success");
+                                location.reload();
+                            });
+                        }
+                    }
+                ]
+            });
         }
 
         $scope.showInventoryPopup = function (inventory) {

@@ -1,6 +1,6 @@
 angular.module('fyp.loginController', ['ngStorage'])
 
-    .controller('LoginCtrl', function ($scope, $ionicPopup, $state, $location, $http, apiService, $localStorage) {
+    .controller('LoginCtrl', function ($scope, $ionicPopup, $state, $location, $http, apiService, $localStorage, $cordovaBeacon) {
 
         $scope.userList = [];
 
@@ -14,39 +14,54 @@ angular.module('fyp.loginController', ['ngStorage'])
             console.log("Username: " + $scope.formUser.username + ", Password: " + $scope.formUser.password)
             checkUserLogin();
         }
+        //   firebase.database().ref('users/' + '1234').set({
+        //     username: 'test',
+        //     email: 'test'
+        //   });
+
+
+        //   var userId = firebase.auth().currentUser.uid;
+        //   return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+        //     var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+        //     console.log(username);
+        //   });
 
         function checkUserLogin() {
             apiService.getUserList().then(function (data) {
-                $scope.userList = data.data.recordset;
+                $scope.userList = data;
                 console.log("User List: " + $scope.userList);
                 console.log($scope.userList);
-            });
-            if ($scope.formUser.username.length < 5) {
-                console.log("Invaild Login !")
-                loginInvaildDesc = "Username should be at least 5 character ! Please try again !"
-                $scope.loginInvaildAlert();
-                return;
-            }
 
-            if ($scope.formUser.password.length < 5) {
-                loginInvaildDesc = "Password should be at least 6 character ! Please try again !"
-                $scope.loginInvaildAlert();
-                return;
-            }
-
-            for(var i=0; i <$scope.userList.length; i++){
-                if($scope.userList[i].username == $scope.formUser.username){
-                    if($scope.userList[i].password == $scope.formUser.password){
-                        $localStorage.currentUser = $scope.userList[i];
-                        console.log("Login success, current user: ");
-                        console.log($localStorage.currentUser);
-                        $scope.goMenuPage();
-                        return;
-                    } 
+                if ($scope.formUser.username.length < 5) {
+                    console.log("Invaild Login !")
+                    loginInvaildDesc = "Username should be at least 5 character ! Please try again !"
+                    $scope.loginInvaildAlert();
+                    return;
                 }
-            }
-            loginInvaildDesc = "Invalid username or password  ! Please try again !"
-            $scope.loginInvaildAlert();
+
+                if ($scope.formUser.password.length < 5) {
+                    loginInvaildDesc = "Password should be at least 5 character ! Please try again !"
+                    $scope.loginInvaildAlert();
+                    return;
+                }
+
+                for (var i = 0; i < $scope.userList.length; i++) {
+                    if ($scope.userList[i].username == $scope.formUser.username) {
+                        if ($scope.userList[i].password == $scope.formUser.password) {
+                            $localStorage.currentUser = $scope.userList[i];
+                            console.log("Login success, current user: ");
+                            console.log($localStorage.currentUser);
+                            $scope.goMenuPage();
+                            return;
+                        }
+                    }
+                }
+
+                loginInvaildDesc = "Invalid username or password  ! Please try again !"
+                $scope.loginInvaildAlert();
+
+            });
+
 
         }
 

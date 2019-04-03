@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginController', 'fyp.registerController','fyp.menuController','fyp.inventoryManageController','fyp.orderController','fyp.userManageController','fyp.messageController'])
+angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginController', 'fyp.registerController','fyp.menuController','fyp.inventoryManageController','fyp.orderController','fyp.userManageController','fyp.messageController','fyp.userProfileController','ngCordovaBeacon'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -102,6 +102,16 @@ angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginCon
           }
         }
       })
+      .state('tab.userProfile', {
+        url: '/userProfile',
+        views: {
+          'tab-userProfile': {
+            templateUrl: 'templates/tab-userProfile.html',
+            controller: 'UserProfileCtrl'
+          }
+        }
+      })
+
       .state('tab.login', {
         url: '/login',
         views: {
@@ -113,6 +123,6 @@ angular.module('fyp', ['ionic', 'fyp.controllers', 'fyp.services', 'fyp.loginCon
       });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/tab/dash');
+    $urlRouterProvider.otherwise('/tab/menu');
 
   });

@@ -89,6 +89,11 @@ ion-content, .scroll-content, .scroll{
     background: #ff9900 !important;
 }
 
+.user-profile-title-bar{
+    background: #2b7d76 !important;
+    color: white;
+}
+
 .list-area{
     min-height: 390px;
     width: 95%;

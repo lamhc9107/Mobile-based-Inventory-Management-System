@@ -4,23 +4,23 @@ angular.module('fyp.userManageController', [])
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.userList = [];
-        var nextUserId = 0;
+        // var nextUserId = 0;
         $scope.findUserId  ={id:''};
         $scope.testOrder = { orderId: '000001', itemId: '000001', productId: '000001', iName: 'testInventory', checkOutTime: '2019-01-25T13:00:00Z', status: 'Ready to be delivered', price: '30', quantity: '4' }
         $scope.createUserform = {username:'',password:'',rePassword:'',email:'',role:''};
         getUserList();
         function getUserList() {
             apiService.getUserList().then(function (data) {
-                $scope.userList = data.data.recordset;
+                $scope.userList = data;
                 console.log("User List: " + $scope.userList);
                 console.log($scope.userList);
-                for(var i = 0; i< $scope.userList.length;i++){
-                    if($scope.userList[i].userId > nextUserId){
-                        nextUserId = $scope.userList[i].userId
-                    }
-                }
-                nextUserId = Number(nextUserId) +1;
-                console.log(nextUserId);
+                // for(var i = 0; i< $scope.userList.length;i++){
+                //     if($scope.userList[i].userId > nextUserId){
+                //         nextUserId = $scope.userList[i].userId
+                //     }
+                // }
+                // nextUserId = Number(nextUserId) +1;
+                // console.log(nextUserId);
             });
         }
 
@@ -44,7 +44,7 @@ angular.module('fyp.userManageController', [])
                             console.log($scope.findUserId.id)
                             apiService.getUserById($scope.findUserId.id).then(function (data) {
                                 console.log(data);
-                                var findUserInfo = data.data.recordset[0];
+                                var findUserInfo = data[0];
                                 console.log(findUserInfo);
                                 $scope.showUserPopup(findUserInfo);
                             });
@@ -121,6 +121,14 @@ angular.module('fyp.userManageController', [])
                         type: 'button-positive',
                         onTap: function (e) {
                             console.log($scope.createUserform);
+                            if ($scope.createUserform.password != $scope.createUserform.rePassword) {
+                                invaildDesc = "Passwords are not matched ! Please enter again !"
+                                var loginInvaildPopup = $ionicPopup.confirm({
+                                    title: 'Invaild password !',
+                                    template: invaildDesc
+                                });
+                                return;
+                            }
                             apiService.createNewUser($scope.createUserform, nextUserId).then(function (data) {
                                 console.log("Success");
                                 location.reload();
