@@ -2,7 +2,7 @@
   <ion-content>
 
     <div class="title-bar">Menu </div>
-    <div class="card function-card" id="user-profile-card" ng-click="functionCardClick($event)">
+    <!-- <div class="card function-card" id="user-profile-card" ng-click="functionCardClick($event)">
       Profile
     </div>
     <div class="card function-card" id="inventory-management-card" ng-click="functionCardClick($event)">
@@ -17,7 +17,6 @@
     <div class="card function-card" id="message-card" ng-click="functionCardClick($event)">
       Messages
     </div>
-    <button ng-click="refresh()"></button>
 
     <div class="bar bar-footer user-info-footer">
       <div class="row">
@@ -29,6 +28,13 @@
           </button>
         </div>
       </div>
+    </div> -->
+
+    <div ng-repeat="beacon in beacons">
+      uuid: {{beacon.uuid}}
+      major: {{beacon.major}}
+      minor: {{beacon.minor}}
+      proximity: {{beacon.proximity}}
     </div>
 
   </ion-content>
