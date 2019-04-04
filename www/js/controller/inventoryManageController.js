@@ -5,7 +5,7 @@ angular.module('fyp.inventoryManageController', [])
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
         // $scope.inventoryList = [];
-        var nextItemId = 0;
+        $scope.deleteInventoryId;
         $scope.createInventoryForm = { productId: '', iName: '', checkInTime: '', distance: '', status: '', price: '', location: '' };
         $scope.userLogin = function (username, password) {
             console.log("User login request");
@@ -50,9 +50,19 @@ angular.module('fyp.inventoryManageController', [])
 
         $scope.deleteInventory = function (itemId) {
             apiService.deleteItem(itemId).then(function (data) {
-                location.reload();
+                showSuccessAlert();
             });
 
+        }
+
+        function showSuccessAlert(){
+            swal({
+                title: "Sccess !",
+                // text: "Inventory has been created!",
+                icon: "success",
+              }).then((value) =>{
+                location.reload();
+              });
         }
 
         $scope.createInventory = function () {
@@ -74,7 +84,7 @@ angular.module('fyp.inventoryManageController', [])
                 '<input type="text" ng-model="createInventoryForm.location" placeholder="">' +
                 '</label>' +
                 '</div>'
-            var myPopup = $ionicPopup.show({
+            var createInventoryFormPopup = $ionicPopup.show({
                 template: userPopupTemplate,
                 title: "Create new inventory",
                 //subTitle: 'Subtitle',
@@ -88,7 +98,8 @@ angular.module('fyp.inventoryManageController', [])
                             console.log($scope.createInventoryForm);
                             apiService.createNewInventory($scope.createInventoryForm, nextItemId).then(function (data) {
                                 console.log("Success");
-                                location.reload();
+                                createInventoryFormPopup.close();
+                                showSuccessAlert();
                             });
                         }
                     }
@@ -132,10 +143,10 @@ angular.module('fyp.inventoryManageController', [])
             console.log("scanning..");
             cordova.plugins.barcodeScanner.scan(
                 function (result) {
-                    alert("We got a barcode\n" +
-                        "Result: " + result.text + "\n" +
-                        "Format: " + result.format + "\n" +
-                        "Cancelled: " + result.cancelled);
+                    // alert("We got a barcode\n" +
+                    //     "Result: " + result.text + "\n" +
+                    //     "Format: " + result.format + "\n" +
+                    //     "Cancelled: " + result.cancelled);
                     createInventoryPopup.close();
                     createInventoryForm.productId = result.text;
                     $scope.createInventory();
@@ -146,9 +157,27 @@ angular.module('fyp.inventoryManageController', [])
             );
         }
 
+        $scope.startDeleteScan = function () {
+            console.log("scanning..");
+            cordova.plugins.barcodeScanner.scan(
+                function (result) {
+                    // alert("We got a barcode\n" +
+                    //     "Result: " + result.text + "\n" +
+                    //     "Format: " + result.format + "\n" +
+                    //     "Cancelled: " + result.cancelled);
+                    deleteInventoryPopup.close();
+                    deleteInventoryId = result.text;
+                    $scope.deleteInventory(deleteInventoryId);
+                },
+                function (error) {
+                    console.log("Scanning failed: " + error);
+                }
+            );
+        }
+
         $scope.showCreateInventoryPopup = function () {
             $scope.data = {}
-            var createInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png">'
+            var createInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startDeleteScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png"><input ng-model="createInventoryForm.productId"></input>'
             var createInventoryPopup = $ionicPopup.show({
                 //templateUrl: 'templates/popup/inventory-popup.html',
                 template: createInventoryPopupTemplate,
@@ -174,7 +203,27 @@ angular.module('fyp.inventoryManageController', [])
             });
         };
 
-        $scope.showCreateInventoryPopup();
+        $scope.showDeleteInventoryPopup = function () {
+            $scope.data = {}
+            var deleteInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png"><input ng-model="deleteInventoryId"></input>'
+            var deleteInventoryPopup = $ionicPopup.show({
+                //templateUrl: 'templates/popup/inventory-popup.html',
+                template: deleteInventoryPopupTemplate,
+                // title: inventory.iName,
+                //subTitle: 'Subtitle',
+                scope: $scope,
+
+                buttons: [
+                    { text: 'Cancel' }
+                ]
+            });
+
+            deleteInventoryPopup.then(function (res) {
+                console.log('Tapped!', res);
+            });
+        };
+
+        // $scope.showCreateInventoryPopup();
 
     })
 

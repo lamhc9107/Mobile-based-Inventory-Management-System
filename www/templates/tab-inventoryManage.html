@@ -7,12 +7,12 @@
     <div class="button-group">
       <div class="row employeeOnlyFunction">
         <div class="col">
-          <button class="button button-calm centered" style="width: 90%;" ng-click="createInventory()">
+          <button class="button button-calm centered" style="width: 90%;" ng-click="showCreateInventoryPopup()">
             Create Inventory
           </button>
         </div>
         <div class="col">
-          <button class="button button-calm centered" style="width: 90%;">
+          <button class="button button-calm centered" style="width: 90%;" ng-click="showDeleteInventoryPopup()">
             Delete Inventory
           </button>
         </div>
@@ -44,7 +44,7 @@
             <div class="row">
               <div class='col'>{{inventory.iName}}</div>
               <div class='col'>{{inventory.status}}</div>
-              <div class='col'>{{inventory.Location}}</div>
+              <div class='col'>{{inventory.price}}</div>
               <div class='col'>
                 <button class="button button-outline button-positive tight-line-button"
                   ng-click="showInventoryPopup(inventory)">
