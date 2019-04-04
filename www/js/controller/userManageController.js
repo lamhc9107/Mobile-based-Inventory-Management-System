@@ -3,7 +3,7 @@ angular.module('fyp.userManageController', [])
     .controller('UserManageCtrl', function ($scope, $ionicPopup, $state, $localStorage, $location, $ionicModal, apiService) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
-        $scope.userList = [];
+        // $scope.userList = [];
         // var nextUserId = 0;
         $scope.findUserId  ={id:''};
         $scope.testOrder = { orderId: '000001', itemId: '000001', productId: '000001', iName: 'testInventory', checkOutTime: '2019-01-25T13:00:00Z', status: 'Ready to be delivered', price: '30', quantity: '4' }

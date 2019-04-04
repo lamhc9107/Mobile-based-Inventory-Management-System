@@ -32,6 +32,7 @@ angular.module('fyp.services', [])
           querySnapshot.forEach((doc) => {
             data.push(_.extend({userId:doc.id},doc.data()));
           });
+          console.log("getUserList finished")
           return data;
         });
         // return $http({

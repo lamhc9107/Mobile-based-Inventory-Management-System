@@ -1,12 +1,12 @@
 angular.module('fyp.inventoryManageController', [])
 
-    .controller('InventoryManageCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal, apiService,$localStorage) {
+    .controller('InventoryManageCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal, apiService, $localStorage) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
-        $scope.inventoryList = [];
+        // $scope.inventoryList = [];
         var nextItemId = 0;
-        $scope.createInventoryForm = {productId:'',iName:'',checkInTime:'',distance:'',status:'', price:'', location:''};
+        $scope.createInventoryForm = { productId: '', iName: '', checkInTime: '', distance: '', status: '', price: '', location: '' };
         $scope.userLogin = function (username, password) {
             console.log("User login request");
             checkUserLogin();
@@ -19,13 +19,13 @@ angular.module('fyp.inventoryManageController', [])
                 $scope.inventoryList = data;
                 console.log("Inventory List: ");
                 console.log($scope.inventoryList);
-                for(var i = 0; i< $scope.inventoryList.length;i++){
-                    if(Number($scope.inventoryList[i].itemId) > nextItemId){
-                        nextItemId = $scope.inventoryList[i].itemId
-                    }
-                }
-                nextItemId = Number(nextItemId) +1;
-                console.log(nextItemId);
+                // for(var i = 0; i< $scope.inventoryList.length;i++){
+                //     if(Number($scope.inventoryList[i].itemId) > nextItemId){
+                //         nextItemId = $scope.inventoryList[i].itemId
+                //     }
+                // }
+                // nextItemId = Number(nextItemId) +1;
+                // console.log(nextItemId);
             });
         }
 
@@ -48,7 +48,7 @@ angular.module('fyp.inventoryManageController', [])
             $state.go('tab.menu');
         }
 
-        $scope.deleteInventory = function(itemId){
+        $scope.deleteInventory = function (itemId) {
             apiService.deleteItem(itemId).then(function (data) {
                 location.reload();
             });
@@ -127,6 +127,54 @@ angular.module('fyp.inventoryManageController', [])
                 console.log('Tapped!', res);
             });
         };
+
+        $scope.startScan = function () {
+            console.log("scanning..");
+            cordova.plugins.barcodeScanner.scan(
+                function (result) {
+                    alert("We got a barcode\n" +
+                        "Result: " + result.text + "\n" +
+                        "Format: " + result.format + "\n" +
+                        "Cancelled: " + result.cancelled);
+                    createInventoryPopup.close();
+                    createInventoryForm.productId = result.text;
+                    $scope.createInventory();
+                },
+                function (error) {
+                    console.log("Scanning failed: " + error);
+                }
+            );
+        }
+
+        $scope.showCreateInventoryPopup = function () {
+            $scope.data = {}
+            var createInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png">'
+            var createInventoryPopup = $ionicPopup.show({
+                //templateUrl: 'templates/popup/inventory-popup.html',
+                template: createInventoryPopupTemplate,
+                // title: inventory.iName,
+                //subTitle: 'Subtitle',
+                scope: $scope,
+
+                buttons: [
+                    { text: 'Cancel' }, {
+                        text: '<b>Next</b>',
+                        type: 'button-positive',
+                        onTap: function (e) {
+                            createInventoryPopup.close();
+                            // createInventoryForm.productId = result.text;
+                            $scope.createInventory();
+                        }
+                    }
+                ]
+            });
+
+            createInventoryPopup.then(function (res) {
+                console.log('Tapped!', res);
+            });
+        };
+
+        $scope.showCreateInventoryPopup();
 
     })
 

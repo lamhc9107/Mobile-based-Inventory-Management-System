@@ -84,4 +84,5 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <engine name="ios" spec="~4.5.5" />
     <plugin name="com.unarin.cordova.beacon" spec="https://github.com/petermetz/cordova-plugin-ibeacon.git" />
+    <plugin name="cordova-plugin-barcodescanner" spec="^0.7.4" />
 </widget>
