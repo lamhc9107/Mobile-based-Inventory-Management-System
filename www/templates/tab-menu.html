@@ -2,7 +2,7 @@
   <ion-content>
 
     <div class="title-bar">Menu </div>
-    <!-- <div class="card function-card" id="user-profile-card" ng-click="functionCardClick($event)">
+    <div class="card function-card" id="user-profile-card" ng-click="functionCardClick($event)">
       Profile
     </div>
     <div class="card function-card" id="inventory-management-card" ng-click="functionCardClick($event)">
@@ -28,14 +28,26 @@
           </button>
         </div>
       </div>
-    </div> -->
-
-    <div ng-repeat="beacon in beacons">
-      uuid: {{beacon.uuid}}
-      major: {{beacon.major}}
-      minor: {{beacon.minor}}
-      proximity: {{beacon.proximity}}
     </div>
+    <!-- <div class="list">
+      <div class="item" ng-repeat="(key, value) in beacons">
+          <div class="row">
+              <div class="col truncate">
+                  {{value.id}}
+              </div>
+          </div>
+          <div class="row">
+              <div class="col">
+                  name: {{value.name}}
+              </div>
+              <div class="col">
+                  rssi: {{value.rssi}}
+              </div>
+          </div>
+      </div>
+  </div> -->
+
+  <!-- <button ng-click="startScanBeacon()">scan</button> -->
 
   </ion-content>
 </ion-view>

@@ -7,25 +7,27 @@ angular.module('fyp.orderController', [])
         // $scope.inventoryList = [];
         $scope.deleteInventoryId;
         $scope.createInventoryForm = { productId: '', iName: '', checkInTime: '', distance: '', status: '', price: '', location: '' };
-        $scope.userLogin = function (username, password) {
-            console.log("User login request");
-            checkUserLogin();
-            console.log("Username: " + $scope.formUser.username + ", Password: " + $scope.formUser.password)
-        }
-        getInventoryList();
+
+        $scope.$on( "$ionicView.enter", function( scopes, states ) {
+            $scope.storageInit();
+        });
+        
 
         function getInventoryList() {
             apiService.getInventoryList().then(function (data) {
                 $scope.inventoryList = data;
                 console.log("Inventory List: ");
                 console.log($scope.inventoryList);
-                // for(var i = 0; i< $scope.inventoryList.length;i++){
-                //     if(Number($scope.inventoryList[i].itemId) > nextItemId){
-                //         nextItemId = $scope.inventoryList[i].itemId
-                //     }
-                // }
-                // nextItemId = Number(nextItemId) +1;
-                // console.log(nextItemId);
+                $scope.$apply();
+            });
+        }
+
+        function getOrderList() {
+            apiService.getOrderList().then(function (data) {
+                $scope.orderList = data;
+                console.log("Inventory List: ");
+                console.log($scope.orderList);
+                $scope.$apply();
             });
         }
 
@@ -35,10 +37,12 @@ angular.module('fyp.orderController', [])
             }
             $scope.$storage = $localStorage;
             $scope.currentUser = $scope.$storage.currentUser;
+            getInventoryList();
+            getOrderList();
             console.log($scope.currentUser);
         }
 
-        $scope.storageInit();
+        
         $scope.logout = function () {
             delete $localStorage.currentUser;
             $state.go('tab.login');
@@ -48,21 +52,15 @@ angular.module('fyp.orderController', [])
             $state.go('tab.menu');
         }
 
-        $scope.deleteInventory = function (itemId) {
-            apiService.deleteItem(itemId).then(function (data) {
-                showSuccessAlert();
-            });
 
-        }
-
-        function showSuccessAlert(){
+        function showSuccessAlert() {
             swal({
                 title: "Sccess !",
                 // text: "Inventory has been created!",
                 icon: "success",
-              }).then((value) =>{
+            }).then((value) => {
                 location.reload();
-              });
+            });
         }
 
         $scope.createInventory = function () {
@@ -107,15 +105,11 @@ angular.module('fyp.orderController', [])
             });
         }
 
-        function makeOrder(productId){
-            console.log(productId);
-
-        }
 
         $scope.showInventoryPopup = function (inventory) {
             $scope.data = {}
-            inventoryPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">ItemId </div> <div class="col">' + inventory.itemId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">ProductId</div><div class="col"> ' + inventory.productId + '</div></div> <div class="row"><div class="col" style="font-weight:bold"> Check-in time </div> <div class="col"> ' + moment(inventory.checkInTime).format('MMMM Do YYYY, h:mm:ss a') + '</div></div><div class="row"><div class="col" style="font-weight:bold">Distance </div> <div class="col">' + inventory.distance + ' m</div></div>'
-            var myPopup = $ionicPopup.show({
+            inventoryPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">ItemId </div> <div class="col">' + inventory.itemId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">ProductId</div><div class="col"> ' + inventory.productId + '</div></div> <div class="row"><div class="col" style="font-weight:bold"> Check-in time </div> <div class="col"> ' + moment(inventory.checkInTime).format('MMMM Do YYYY, h:mm:ss a') + '</div></div><div class="row"><div class="col" style="font-weight:bold">Price</div> <div class="col">$ ' + inventory.price + ' </div></div>'
+            var inventoryPopup = $ionicPopup.show({
                 //templateUrl: 'templates/popup/inventory-popup.html',
                 template: inventoryPopupTemplate,
                 title: inventory.iName,
@@ -133,7 +127,7 @@ angular.module('fyp.orderController', [])
                 ]
             });
 
-            myPopup.then(function (res) {
+            inventoryPopup.then(function (res) {
                 console.log('Tapped!', res);
             });
         };
@@ -156,71 +150,13 @@ angular.module('fyp.orderController', [])
             );
         }
 
-        $scope.startDeleteScan = function () {
-            console.log("scanning..");
-            cordova.plugins.barcodeScanner.scan(
-                function (result) {
-                    // alert("We got a barcode\n" +
-                    //     "Result: " + result.text + "\n" +
-                    //     "Format: " + result.format + "\n" +
-                    //     "Cancelled: " + result.cancelled);
-                    deleteInventoryPopup.close();
-                    deleteInventoryId = result.text;
-                    $scope.deleteInventory(deleteInventoryId);
-                },
-                function (error) {
-                    console.log("Scanning failed: " + error);
-                }
-            );
+
+        function makeOrder(productId) {
+            apiService.createOrder(productId, $scope.currentUser.userId).then(function (data) {
+                console.log("Success");
+                showSuccessAlert();
+            });
         }
-
-        $scope.showCreateInventoryPopup = function () {
-            $scope.data = {}
-            var createInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startDeleteScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png"><input ng-model="createInventoryForm.productId"></input>'
-            var createInventoryPopup = $ionicPopup.show({
-                //templateUrl: 'templates/popup/inventory-popup.html',
-                template: createInventoryPopupTemplate,
-                // title: inventory.iName,
-                //subTitle: 'Subtitle',
-                scope: $scope,
-
-                buttons: [
-                    { text: 'Cancel' }, {
-                        text: '<b>Next</b>',
-                        type: 'button-positive',
-                        onTap: function (e) {
-                            createInventoryPopup.close();
-                            // createInventoryForm.productId = result.text;
-                            $scope.createInventory();
-                        }
-                    }
-                ]
-            });
-
-            createInventoryPopup.then(function (res) {
-                console.log('Tapped!', res);
-            });
-        };
-
-        $scope.showDeleteInventoryPopup = function () {
-            $scope.data = {}
-            var deleteInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png"><input ng-model="deleteInventoryId"></input>'
-            var deleteInventoryPopup = $ionicPopup.show({
-                //templateUrl: 'templates/popup/inventory-popup.html',
-                template: deleteInventoryPopupTemplate,
-                // title: inventory.iName,
-                //subTitle: 'Subtitle',
-                scope: $scope,
-
-                buttons: [
-                    { text: 'Cancel' }
-                ]
-            });
-
-            deleteInventoryPopup.then(function (res) {
-                console.log('Tapped!', res);
-            });
-        };
 
     })
 

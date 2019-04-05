@@ -8,19 +8,20 @@ angular.module('fyp.userManageController', [])
         $scope.findUserId  ={id:''};
         $scope.testOrder = { orderId: '000001', itemId: '000001', productId: '000001', iName: 'testInventory', checkOutTime: '2019-01-25T13:00:00Z', status: 'Ready to be delivered', price: '30', quantity: '4' }
         $scope.createUserform = {username:'',password:'',rePassword:'',email:'',role:''};
-        getUserList();
+        
+
+        $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
+            $scope.storageInit();
+            getUserList();
+
+        });
+        
         function getUserList() {
             apiService.getUserList().then(function (data) {
                 $scope.userList = data;
                 console.log("User List: " + $scope.userList);
                 console.log($scope.userList);
-                // for(var i = 0; i< $scope.userList.length;i++){
-                //     if($scope.userList[i].userId > nextUserId){
-                //         nextUserId = $scope.userList[i].userId
-                //     }
-                // }
-                // nextUserId = Number(nextUserId) +1;
-                // console.log(nextUserId);
+                $scope.$apply();
             });
         }
 
@@ -58,17 +59,12 @@ angular.module('fyp.userManageController', [])
                 $state.go('tab.login');
             }
             $scope.$storage = $localStorage;
-            $scope.currentUser = $scope.$storage.currentUser;
+            $scope.currentUser = $scope.$storage.currentUser;    
             console.log($scope.currentUser);
         }
 
-        $scope.storageInit();
         $scope.logout = function () {
             delete $localStorage.currentUser;
-            $state.go('tab.login');
-        }
-
-        $scope.logout = function () {
             $state.go('tab.login');
         }
 
@@ -129,7 +125,7 @@ angular.module('fyp.userManageController', [])
                                 });
                                 return;
                             }
-                            apiService.createNewUser($scope.createUserform, nextUserId).then(function (data) {
+                            apiService.createNewUser($scope.createUserform).then(function (data) {
                                 console.log("Success");
                                 location.reload();
                             });

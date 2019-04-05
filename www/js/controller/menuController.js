@@ -1,9 +1,16 @@
 angular.module('fyp.menuController', [])
 
-    .controller('MenuCtrl', function ($scope, $ionicPopup, $state, $location, $localStorage, $cordovaBeacon, $rootScope, $ionicPlatform) {
+    .controller('MenuCtrl', function ($scope, $ionicPopup, $state, $location, $localStorage) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
+
+        $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
+            $scope.storageInit();
+        });
+        $scope.$on( "$ionicView.enter", function( scopes, states ) {
+            functionCardHide();
+        });
 
         function functionCardHide() {
             console.log($scope.currentUser.role)
@@ -24,16 +31,14 @@ angular.module('fyp.menuController', [])
             $scope.$storage = $localStorage;
             $scope.currentUser = $scope.$storage.currentUser;
             console.log($scope.currentUser);
+            // $scope.$apply();
         }
 
-        $scope.storageInit();
-
-        functionCardHide();
         $scope.logout = function () {
             delete $localStorage.currentUser;
             $state.go('tab.login');
         }
-
+        
         $scope.functionCardClick = function (functionCard) {
             console.log(functionCard.target.id + " clicked !")
             switch (functionCard.target.id) {
@@ -73,26 +78,70 @@ angular.module('fyp.menuController', [])
             location.reload();
         }
 
-        $scope.beacons = {};
+        $scope.beacons = []
 
-        $ionicPlatform.ready(function () {
+        $scope.startScanBeacon = function(){
+            console.log("start scan")
+            ble.startScan([], function(device) {
+                console.log(JSON.stringify(device));
+                $scope.beacons.push(device)
+            }, );
+            
+            setTimeout(ble.stopScan,
+                5000,
+                function() { console.log("Scan complete"); },
+                function() { console.log("stopScan failed"); }
+            );
 
-            $cordovaBeacon.requestWhenInUseAuthorization();
+        }
 
-            $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function (event, pluginResult) {
-                var uniqueBeaconKey;
-                for (var i = 0; i < pluginResult.beacons.length; i++) {
-                    uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
-                    $scope.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
-                }
-                $scope.$apply();
-            });
+        
 
-            $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("estimote", "b9407f30-f5f8-466e-aff9-25556b57fe6d"));
+        // $cordovaBluetoothLE.initialize({request:true}).then(null,
+        //     function(obj) {
+        //       alert("errors")
+        //       //Handle errors
+        //     },
+        //     function(obj) {
+        //       //Handle successes
+        //       alert("successes")
+        //     }
+        //   );
+        //   $cordovaBluetoothLE.startScan({services:[]}).then(null,
+        //     function(obj) {
+        //       //Handle errors
+        //       console.log(obj.message);
+        //     },
+        //     function(obj) {
+        //       if (obj.status == "scanResult")
+        //       {
+        //         //Device found
+        //       }
+        //       else if (obj.status == "scanStarted")
+        //       {
+        //         //Scan started
+        //       }
+        //     }
+        //   );
 
-        });
+        // $scope.beacons = [];
 
-
+        // $ionicPlatform.ready(function() {
+    
+        //     $cordovaBeacon.requestWhenInUseAuthorization();
+    
+        //     $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
+        //         var uniqueBeaconKey;
+        //         for(var i = 0; i < pluginResult.beacons.length; i++) {
+        //             uniqueBeaconKey = pluginResult.beacons[i].uuid + ":" + pluginResult.beacons[i].major + ":" + pluginResult.beacons[i].minor;
+        //             $scope.beacons[uniqueBeaconKey] = pluginResult.beacons[i];
+        //         }
+        //         $scope.$apply();
+        //     });
+    
+        //     $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("estimote", "b9407f30-f5f8-466e-aff9-25556b57fe6d"));
+    
+        // });
 
     })
 

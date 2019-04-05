@@ -68,7 +68,11 @@ ion-content, .scroll-content, .scroll{
     font-weight: bold;
     color: white
 }
-
+.truncate{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 #inventory-management-card{
     background: #1176f3 !important;
 }

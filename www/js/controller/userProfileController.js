@@ -4,24 +4,21 @@ angular.module('fyp.userProfileController', [])
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.userList = [];
-        var nextUserId = 0;
         $scope.findUserId  ={id:''};
         $scope.testOrder = { orderId: '000001', itemId: '000001', productId: '000001', iName: 'testInventory', checkOutTime: '2019-01-25T13:00:00Z', status: 'Ready to be delivered', price: '30', quantity: '4' }
         $scope.createUserform = {username:'',password:'',rePassword:'',email:'',role:''};
         $scope.editUserform = {username:'',oldPassword:'',newPassword:'',reNewRpassword:'',email:''};
-        getUserList();
+        
+        $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
+            $scope.storageInit();
+            getUserList();
+        });
+        
         function getUserList() {
             apiService.getUserList().then(function (data) {
                 $scope.userList = data;
                 console.log("User List: " + $scope.userList);
                 console.log($scope.userList);
-                for(var i = 0; i< $scope.userList.length;i++){
-                    if($scope.userList[i].userId > nextUserId){
-                        nextUserId = $scope.userList[i].userId
-                    }
-                }
-                nextUserId = Number(nextUserId) +1;
-                console.log(nextUserId);
             });
         }
 
@@ -65,7 +62,6 @@ angular.module('fyp.userProfileController', [])
             $scope.editUserform.email = $scope.currentUser.email;
         }
 
-        $scope.storageInit();
         $scope.logout = function () {
             delete $localStorage.currentUser;
             $state.go('tab.login');

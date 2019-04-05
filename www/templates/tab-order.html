@@ -26,11 +26,11 @@
           <div class='col'>Price</div>
           <div class='col'></div>
         </div>
-        <div class="row inventory-item" ng-repeat="inventory in inventoryList">
+        <div class="row inventory-item" ng-repeat="inventory in inventoryList track by $index">
           <div class="row">
             <div class='col'>{{inventory.iName}}</div>
               <div class='col'>{{inventory.status}}</div>
-              <div class='col'>{{inventory.Location}}</div>
+              <div class='col'>{{inventory.price}}</div>
             <div class='col'>
               <button class="button button-outline button-positive tight-line-button"
                   ng-click="showInventoryPopup(inventory)">
@@ -46,7 +46,7 @@
     <div class="bar bar-footer user-info-footer">
       <div class="row">
         <div class='col-75'>
-          <b>Welcome ! </b>{{testUser.username}} (Manager)</div>
+          <b>Welcome ! </b>{{currentUser.username}} ({{currentUser.role}})</div>
         <div class='col'>
           <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
             Logout

@@ -184,43 +184,50 @@ angular.module('fyp.services', [])
         // })
       },
       getInventoryById: function (_itemId) {
-        return $http({
-          method: "GET",
-          url: apiUrl + "inventories/" + _itemId,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        }).then(function mySucces(response) {
-          // console.log(response);
-          return response;
-        }, function myError(response) {
-
+        return db.collection("inventories").get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            if (_itemId == doc.id) {
+              return doc.data();
+            }
+          });
         })
       },
-      createNewInventory: function (createInventoryform, nextItemId) {
-        console.log(nextItemId);
-        return $http({
-          method: "POST",
-          url: apiUrl + "inventories",
-          // withCredentials: true,
-          data: {
-            itemId: nextItemId,
-            productId: "4987241148622",
-            iName: createInventoryform.iName,
-            checkInTime: createInventoryform.checkInTime,
-            distance: 0,
-            status: "Available",
-            price: createInventoryform.price
-          },
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(function mySucces(response) {
-          // console.log(response);
-          return response;
-        }, function myError(response) {
-
+      createNewInventory: function (createInventoryform) {
+        return db.collection("inventories").add({
+          productId: createInventoryform.productId,
+          iName: createInventoryform.iName,
+          price: createInventoryform.price,
+          checkInTime: moment().format(),
+          location: createInventoryform.location,
+          status: "Available"
         })
+          .then(function (docRef) {
+            return console.log("itemId: " + docRef.id + " created!");
+          });
+
+        // console.log(nextItemId);
+        // return $http({
+        //   method: "POST",
+        //   url: apiUrl + "inventories",
+        //   // withCredentials: true,
+        //   data: {
+        //     itemId: nextItemId,
+        //     productId: "4987241148622",
+        //     iName: createInventoryform.iName,
+        //     checkInTime: createInventoryform.checkInTime,
+        //     distance: 0,
+        //     status: "Available",
+        //     price: createInventoryform.price
+        //   },
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded'
+        //   }
+        // }).then(function mySucces(response) {
+        //   // console.log(response);
+        //   return response;
+        // }, function myError(response) {
+
+        // })
       },
       deleteItem: function (_itemId) {
         console.log(_itemId);
@@ -240,7 +247,45 @@ angular.module('fyp.services', [])
         }, function myError(response) {
 
         })
+      },
+
+      createOrder: function (_productId, _userId) {
+        console.log("productId: "+ _productId+ " userId: "+_userId)
+        return db.collection("orders").add({
+          productId: _productId,
+          userId: _userId,
+          orderTime: moment().format(),
+          orderStatus: "Pending",
+          employee: ""
+        })
+          .then(function (docRef) {
+            return console.log("orderId: " + docRef.id + " created!");
+          });
+      },
+      getOrderList: function () {
+
+        return db.collection("orders").get().then((querySnapshot) => {
+          var data = [];
+          querySnapshot.forEach((doc) => {
+            data.push(_.extend({orderId:doc.id},doc.data()));
+          });
+          console.log("getOrderList finished")
+          return data;
+        });
+        // return $http({
+        //   method: "GET",
+        //   url: apiUrl + "users",
+        //   headers: {
+        //     'Content-Type': 'application/json; charset=utf-8'
+        //   }
+        // }).then(function mySucces(response) {
+        //   console.log(response);
+        //   return response;
+        // }, function myError(response) {
+
+        // })
       }
+      
     }
   })
 

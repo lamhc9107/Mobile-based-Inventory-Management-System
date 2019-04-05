@@ -40,11 +40,11 @@
           <!-- <div class='col'></div> -->
         </div>
         <div class="scroll-area">
-          <div class="row inventory-item" ng-repeat="inventory in inventoryList">
+          <div class="row inventory-item" ng-repeat="inventory in inventoryList track by $index">
             <div class="row">
               <div class='col'>{{inventory.iName}}</div>
               <div class='col'>{{inventory.status}}</div>
-              <div class='col'>{{inventory.price}}</div>
+              <div class='col'>{{inventory.location}}</div>
               <div class='col'>
                 <button class="button button-outline button-positive tight-line-button"
                   ng-click="showInventoryPopup(inventory)">

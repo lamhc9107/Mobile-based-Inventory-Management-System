@@ -26,7 +26,7 @@
             <div class='col'>Role</div>
             <div class='col'></div>
           </div>
-          <div class="row inventory-item" ng-repeat="user in userList">
+          <div class="row inventory-item" ng-repeat="user in userList track by $index">
             <div class="row">
               <!-- <div class='col'>{{user.userId}}</div> -->
               <div class='col'>{{user.username}}</div>
@@ -45,7 +45,7 @@
       <div class="bar bar-footer user-info-footer">
         <div class="row">
           <div class='col-75'>
-            <b>Welcome ! </b>{{currentUser.username}} (Manager)</div>
+            <b>Welcome ! </b>{{currentUser.username}} ({{currentUser.role}})</div>
           <div class='col'>
             <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
               Logout

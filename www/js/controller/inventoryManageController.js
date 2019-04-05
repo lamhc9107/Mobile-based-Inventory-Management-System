@@ -12,20 +12,19 @@ angular.module('fyp.inventoryManageController', [])
             checkUserLogin();
             console.log("Username: " + $scope.formUser.username + ", Password: " + $scope.formUser.password)
         }
-        getInventoryList();
+
+        $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
+            $scope.storageInit();
+            getInventoryList();
+        });
+
 
         function getInventoryList() {
             apiService.getInventoryList().then(function (data) {
                 $scope.inventoryList = data;
                 console.log("Inventory List: ");
                 console.log($scope.inventoryList);
-                // for(var i = 0; i< $scope.inventoryList.length;i++){
-                //     if(Number($scope.inventoryList[i].itemId) > nextItemId){
-                //         nextItemId = $scope.inventoryList[i].itemId
-                //     }
-                // }
-                // nextItemId = Number(nextItemId) +1;
-                // console.log(nextItemId);
+                $scope.$apply();
             });
         }
 
@@ -38,7 +37,6 @@ angular.module('fyp.inventoryManageController', [])
             console.log($scope.currentUser);
         }
 
-        $scope.storageInit();
         $scope.logout = function () {
             delete $localStorage.currentUser;
             $state.go('tab.login');
@@ -96,7 +94,7 @@ angular.module('fyp.inventoryManageController', [])
                         type: 'button-positive',
                         onTap: function (e) {
                             console.log($scope.createInventoryForm);
-                            apiService.createNewInventory($scope.createInventoryForm, nextItemId).then(function (data) {
+                            apiService.createNewInventory($scope.createInventoryForm).then(function (data) {
                                 console.log("Success");
                                 createInventoryFormPopup.close();
                                 showSuccessAlert();
@@ -139,6 +137,7 @@ angular.module('fyp.inventoryManageController', [])
             });
         };
 
+
         $scope.startScan = function () {
             console.log("scanning..");
             cordova.plugins.barcodeScanner.scan(
@@ -147,9 +146,10 @@ angular.module('fyp.inventoryManageController', [])
                     //     "Result: " + result.text + "\n" +
                     //     "Format: " + result.format + "\n" +
                     //     "Cancelled: " + result.cancelled);
-                    createInventoryPopup.close();
-                    createInventoryForm.productId = result.text;
-                    $scope.createInventory();
+                    // createInventoryPopup.close();
+                    console.log(result.text);
+                    $scope.scanResult = result.text;
+                    // $scope.createInventory();
                 },
                 function (error) {
                     console.log("Scanning failed: " + error);
@@ -177,7 +177,7 @@ angular.module('fyp.inventoryManageController', [])
 
         $scope.showCreateInventoryPopup = function () {
             $scope.data = {}
-            var createInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startDeleteScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png"><input ng-model="createInventoryForm.productId"></input>'
+            var createInventoryPopupTemplate = '<h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4><img ng-click="startScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png"><input ng-model="scanResult"></input>'
             var createInventoryPopup = $ionicPopup.show({
                 //templateUrl: 'templates/popup/inventory-popup.html',
                 template: createInventoryPopupTemplate,
