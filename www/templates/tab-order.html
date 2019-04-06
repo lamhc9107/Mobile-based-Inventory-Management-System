@@ -13,8 +13,8 @@
           </button>
         </div>
         <div class="col">
-          <button class="button button-royal centered" style="width: 90%;">
-            Cancel Order
+          <button class="button button-royal centered" style="width: 90%;" ng-click='showOrderHistoryPopup()'>
+            Order History
           </button>
         </div>
       </div>
@@ -29,13 +29,13 @@
         <div class="row inventory-item" ng-repeat="inventory in inventoryList track by $index">
           <div class="row">
             <div class='col'>{{inventory.iName}}</div>
-              <div class='col'>{{inventory.status}}</div>
-              <div class='col'>{{inventory.price}}</div>
+            <div class='col'>{{inventory.status}}</div>
+            <div class='col'>{{inventory.price}}</div>
             <div class='col'>
               <button class="button button-outline button-positive tight-line-button"
-                  ng-click="showInventoryPopup(inventory)">
-                  Detail
-                </button>
+                ng-click="showInventoryPopup(inventory)">
+                Detail
+              </button>
             </div>
           </div>
         </div>
@@ -55,5 +55,30 @@
       </div>
     </div>
 
+    <script id="orderHistoryModal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar>
+          <h1 class="title" style='background:#886aea; color: white; margin: 0;'>Order History</h1>
+        </ion-header-bar>
+        <ion-content>
+          <div class="inventory-item" style="padding: 5% !important;"ng-repeat="history in historyList track by $index">
+            <div style='display:block'>Status: {{history.orderStatus}}</div>
+            <h4 style='display:block'>order# {{history.orderId}}</h4>
+            <div style='display:inline; padding-left:4%;padding-right: 4%;'>{{history.iName}}</div>
+            <div style='display:inline; padding-left:4%;padding-right: 4%;'>${{history.price}}</div>
+            <button class="button button-outline button-positive tight-line-button"
+                ng-click="showInventoryPopup(inventory)">
+                CheckOut
+              </button>
+              <button class="button button-outline button-positive tight-line-button"
+                ng-click="showInventoryPopup(inventory)">
+                Cancel
+              </button>
+          </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
   </ion-content>
+
 </ion-view>

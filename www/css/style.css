@@ -2,7 +2,7 @@
     border: 1px #ddd solid;
 }
 .scroll-content{
-    background: url("../img/background1.jpg") !important;
+    background: url("../img/background1.jpg");
     background-size: cover;
     /* filter: blur(8px);
     -webkit-filter: blur(8px); */
@@ -149,4 +149,23 @@ ion-content, .scroll-content, .scroll{
 .button-order{
     background: #9262bd;
     color: white;
+}
+
+.modal{
+    height: 50% !important; 
+    width: 80% !important; 
+    display: block; 
+    margin: auto;
+    min-height: 70%;
+    top: 10%;
+    left:10%;
+    border-radius: 3%;
+}
+.modal-backdrop-bg{
+    background: black;
+    opacity: 0.3;
+}
+
+ion-modal-view ion-content{
+    background: white !important;
 }

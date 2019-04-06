@@ -30,7 +30,7 @@ angular.module('fyp.services', [])
         return db.collection("users").get().then((querySnapshot) => {
           var data = [];
           querySnapshot.forEach((doc) => {
-            data.push(_.extend({userId:doc.id},doc.data()));
+            data.push(_.extend({ userId: doc.id }, doc.data()));
           });
           console.log("getUserList finished")
           return data;
@@ -124,17 +124,17 @@ angular.module('fyp.services', [])
       },
       updateUser: function (_userId, editUserForm) {
         var data;
-        if(editUserForm.newPassword==''|| editUserForm.newPassword==null){
+        if (editUserForm.newPassword == '' || editUserForm.newPassword == null) {
           data = {
             username: editUserForm.username,
             email: editUserForm.email
-          } 
-        } else{
+          }
+        } else {
           data = {
             username: editUserForm.username,
             password: editUserForm.newPassword,
             email: editUserForm.email
-          } 
+          }
         }
 
         return db.collection("users").doc(_userId).update(data)
@@ -166,7 +166,7 @@ angular.module('fyp.services', [])
         return db.collection("inventories").get().then((querySnapshot) => {
           var data = [];
           querySnapshot.forEach((doc) => {
-            data.push(_.extend({itemId:doc.id},doc.data()));
+            data.push(_.extend({ itemId: doc.id }, doc.data()));
           });
           return data;
         });
@@ -191,6 +191,18 @@ angular.module('fyp.services', [])
             }
           });
         })
+      },
+      getInventoryByProductId: function (_productId) {
+        return db.collection("inventories").where("productId", "==", _productId)
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              return doc.data();
+            });
+          })
+          .catch(function (error) {
+            console.log("Error getting documents: ", error);
+          });
       },
       createNewInventory: function (createInventoryform) {
         return db.collection("inventories").add({
@@ -250,7 +262,7 @@ angular.module('fyp.services', [])
       },
 
       createOrder: function (_productId, _userId) {
-        console.log("productId: "+ _productId+ " userId: "+_userId)
+        console.log("productId: " + _productId + " userId: " + _userId)
         return db.collection("orders").add({
           productId: _productId,
           userId: _userId,
@@ -267,7 +279,7 @@ angular.module('fyp.services', [])
         return db.collection("orders").get().then((querySnapshot) => {
           var data = [];
           querySnapshot.forEach((doc) => {
-            data.push(_.extend({orderId:doc.id},doc.data()));
+            data.push(_.extend({ orderId: doc.id }, doc.data()));
           });
           console.log("getOrderList finished")
           return data;
@@ -285,7 +297,7 @@ angular.module('fyp.services', [])
 
         // })
       }
-      
+
     }
   })
 

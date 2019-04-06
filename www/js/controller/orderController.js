@@ -1,6 +1,6 @@
 angular.module('fyp.orderController', [])
 
-    .controller('OrderCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal, apiService, $localStorage) {
+    .controller('OrderCtrl', function ($scope, $ionicPopup, $state, $location, $ionicModal, apiService, $localStorage, $ionicModal) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
@@ -8,10 +8,12 @@ angular.module('fyp.orderController', [])
         $scope.deleteInventoryId;
         $scope.createInventoryForm = { productId: '', iName: '', checkInTime: '', distance: '', status: '', price: '', location: '' };
 
-        $scope.$on( "$ionicView.enter", function( scopes, states ) {
+        $scope.$on("$ionicView.enter", function (scopes, states) {
             $scope.storageInit();
+            getInventoryList();
+            getOrderList();
         });
-        
+
 
         function getInventoryList() {
             apiService.getInventoryList().then(function (data) {
@@ -25,7 +27,7 @@ angular.module('fyp.orderController', [])
         function getOrderList() {
             apiService.getOrderList().then(function (data) {
                 $scope.orderList = data;
-                console.log("Inventory List: ");
+                console.log("Order List: ");
                 console.log($scope.orderList);
                 $scope.$apply();
             });
@@ -37,12 +39,10 @@ angular.module('fyp.orderController', [])
             }
             $scope.$storage = $localStorage;
             $scope.currentUser = $scope.$storage.currentUser;
-            getInventoryList();
-            getOrderList();
             console.log($scope.currentUser);
         }
 
-        
+
         $scope.logout = function () {
             delete $localStorage.currentUser;
             $state.go('tab.login');
@@ -104,6 +104,82 @@ angular.module('fyp.orderController', [])
                 ]
             });
         }
+
+
+
+        apiService.getInventoryByProductId("1").then(function (data) {
+            console.log(data);
+        });
+
+        $ionicModal.fromTemplateUrl('orderHistoryModal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (modal) {
+            $scope.modal = modal;
+        });
+        $scope.openOrderHistoryModal = function () {
+            $scope.modal.show();
+        };
+        $scope.closeOrderHistoryModal = function () {
+            $scope.modal.hide();
+        };
+        //Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function () {
+            $scope.modal.remove();
+        });
+        // Execute action on hide modal
+        $scope.$on('modal.hidden', function () {
+            // Execute action
+        });
+        // Execute action on remove modal
+        $scope.$on('modal.removed', function () {
+            // Execute action
+        });
+
+        $scope.showOrderHistoryPopup = function () {
+            $scope.historyList = [];
+            for (var i = 0; i < $scope.orderList.length; i++) {
+                
+                if ($scope.orderList[i].userId == $scope.currentUser.userId) {
+                    // console.log($scope.orderList[i])
+                    for (var k = 0; k < $scope.inventoryList.length; k++) {
+                        if ($scope.inventoryList[k].productId == $scope.orderList[i].productId) {
+                            console.log($scope.orderList[i])
+                            $scope.historyList.push(_.extend( $scope.orderList[i],$scope.inventoryList[k]));
+                            // $scope.historyList.push(_.extend($scope.inventoryList[k], $scope.orderList[i]));
+                            $scope.historyList = _.sortBy($scope.historyList, -'orderTime');
+                        }
+                    }
+
+                }
+            }
+            console.log($scope.historyList);
+            $scope.openOrderHistoryModal();
+            // orderHistoryPopupTemplate = '<div class="row inventory-item" ng-repeat="history in historyList track by $index">order# {{hisotry.orderId}}</div>'
+            // var orderHistoryPopup = $ionicPopup.show({
+            //     //templateUrl: 'templates/popup/inventory-popup.html',
+            //     template: orderHistoryPopupTemplate,
+            //     title: "Order History",
+            //     //subTitle: 'Subtitle',
+            //     scope: $scope,
+
+            //     buttons: [
+            //         { text: 'Cancel' }, {
+            //             text: '<b>order</b>',
+            //             type: 'button-positive',
+            //             onTap: function (e) {
+            //                 makeOrder(inventory.productId);
+            //             }
+            //         }
+            //     ]
+            // });
+
+            // orderHistoryPopup.then(function (res) {
+            //     console.log('Tapped!', res);
+            // });
+        };
+
+
 
 
         $scope.showInventoryPopup = function (inventory) {
