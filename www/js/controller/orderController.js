@@ -108,6 +108,7 @@ angular.module('fyp.orderController', [])
             $scope.orderInventory = {};
             // apiService.updateOrderStatus(order.orderId, "Processing").then(function (data) {
                 // $scope.startScanBeacon().then(function (data) {
+                    $scope.currentOrder = order;
                     $scope.openStartOrderModal();
                     for (var i = 0; i < $scope.inventoryList.length; i++) {
                         if ($scope.inventoryList[i].productId == order.productId) {
@@ -210,6 +211,23 @@ angular.module('fyp.orderController', [])
                 $scope.startOrderModal.remove();
             });
 
+            $ionicModal.fromTemplateUrl('waitForReceiveModal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (waitForReceiveModal) {
+                $scope.waitForReceiveModal = waitForReceiveModal;
+            });
+            $scope.openWaitForReceiveModal = function () {
+                $scope.waitForReceiveModal.show();
+            };
+            $scope.closeWaitForReceiveModal = function () {
+                $scope.waitForReceiveModal.hide();
+            };
+            //Cleanup the modal when we're done with it!
+            $scope.$on('$destroy', function () {
+                $scope.waitForReceiveModal.remove();
+            });
+
 
             $scope.showOrderHistoryPopup = function () {
                 $scope.historyList = [];
@@ -304,9 +322,28 @@ angular.module('fyp.orderController', [])
                         //     "Result: " + result.text + "\n" +
                         //     "Format: " + result.format + "\n" +
                         //     "Cancelled: " + result.cancelled);
-                        createInventoryPopup.close();
-                        createInventoryForm.productId = result.text;
-                        $scope.createInventory();
+                        // createInventoryPopup.close();
+                        // createInventoryForm.productId = result.text;
+                        // $scope.createInventory();
+                        console.log($scope.orderInventory.productId)
+                        console.log(result.text)
+                        if(result.text==$scope.orderInventory.productId){
+                            $scope.closeStartOrderModal();
+                            // swal({
+                            //     title: "Sccess !",
+                            //     // text: "Inventory has been created!",
+                            //     icon: "success",
+                            // }).then((value) => {
+                                $scope.openWaitForReceiveModal();
+                                $('#qrcode').qrcode($scope.currentOrder.orderId);
+                            // });
+                        }else{
+                            swal({
+                                title: "Oops !",
+                                text: "Wrong item scanned!",
+                                icon: "error",
+                            })
+                        }
                     },
                     function (error) {
                         console.log("Scanning failed: " + error);
