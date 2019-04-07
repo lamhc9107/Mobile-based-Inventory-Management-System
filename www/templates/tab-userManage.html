@@ -1,31 +1,33 @@
-<ion-view view-title="InvenManage">
-    <ion-content>
-      <div class="title-bar" id="user-manage-card">Users Management
-        <span class="back-button" ng-click="back()">
-          <i class="fas fa-chevron-left"></i> Back</span>
-      </div>
-      <div class="button-group">
-  
-        <div class="row">
-          <div class="col employeeOnlyFunction">
-            <button class="button button-assertive centered" style="width: 90%;" ng-click="findUser()">
-              Find User
-            </button>
-          </div>
-          <div class="col">
-            <button class="button button-assertive centered" style="width: 90%;" ng-click="createUser()"> 
-              Create User
-            </button>
-          </div>
+<ion-view view-title="InvenManage" hide-nav-bar='true'>
+  <ion-content>
+    <div class="title-bar" id="user-manage-card">Users Management
+      <span class="back-button" ng-click="back()">
+        <i class="fas fa-chevron-left"></i> Back</span>
+    </div>
+    <div class="button-group">
+
+      <div class="row">
+        <div class="col employeeOnlyFunction">
+          <button class="button button-assertive centered" style="width: 90%;" ng-click="findUser()">
+            Find User
+          </button>
         </div>
-  
-        <div class="list-area centered">
-          <div class="row" style="font-weight:bold; background: #ef473a; color: white">
-            <!-- <div class='col'>User Id</div> -->
-            <div class='col'>Name</div>
-            <div class='col'>Role</div>
-            <div class='col'></div>
-          </div>
+        <div class="col">
+          <button class="button button-assertive centered" style="width: 90%;" ng-click="createUser()">
+            Create User
+          </button>
+        </div>
+      </div>
+
+      <div class="list-area centered">
+
+        <div class="row" style="font-weight:bold; background: #ef473a; color: white">
+          <!-- <div class='col'>User Id</div> -->
+          <div class='col'>Name</div>
+          <div class='col'>Role</div>
+          <div class='col'></div>
+        </div>
+        <ion-scroll>
           <div class="row inventory-item" ng-repeat="user in userList track by $index">
             <div class="row">
               <!-- <div class='col'>{{user.userId}}</div> -->
@@ -38,21 +40,21 @@
               </div>
             </div>
           </div>
-        </div>
-  
       </div>
-  
-      <div class="bar bar-footer user-info-footer">
-        <div class="row">
-          <div class='col-75'>
-            <b>Welcome ! </b>{{currentUser.username}} ({{currentUser.role}})</div>
-          <div class='col'>
-            <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
-              Logout
-            </button>
-          </div>
+      </ion-scroll>
+    </div>
+
+    <div class="bar bar-footer user-info-footer">
+      <div class="row">
+        <div class='col-75'>
+          <b>Welcome ! </b>{{currentUser.username}} ({{currentUser.role}})</div>
+        <div class='col'>
+          <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
+            Logout
+          </button>
         </div>
       </div>
-  
-    </ion-content>
-  </ion-view>
+    </div>
+
+  </ion-content>
+</ion-view>

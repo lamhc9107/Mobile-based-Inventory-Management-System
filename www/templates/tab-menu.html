@@ -1,4 +1,4 @@
-<ion-view view-title="InvenManage">
+<ion-view view-title="InvenManage" hide-nav-bar='true' hide-nav-bar='true'>
   <ion-content>
 
     <div class="title-bar">Menu </div>
@@ -10,6 +10,7 @@
     </div>
     <div class="card function-card" id="order-card" ng-click="functionCardClick($event)">
       Orders
+      <span ng-show='pendingCount>0 && currentUser.role!="Customer"' id="order-card-inside" ng-click="functionCardClick($event)"> : {{pendingCount}} pending orders</span>
     </div>
     <div class="card function-card" id="user-manage-card" ng-click="functionCardClick($event)">
       Users
@@ -17,6 +18,8 @@
     <div class="card function-card" id="message-card" ng-click="functionCardClick($event)">
       Messages
     </div>
+
+    <div id="qrcode"></div>
 
     <div class="bar bar-footer user-info-footer">
       <div class="row">

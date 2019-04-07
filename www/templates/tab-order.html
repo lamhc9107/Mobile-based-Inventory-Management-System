@@ -1,4 +1,4 @@
-<ion-view view-title="InvenManage">
+<ion-view view-title="InvenManage" hide-nav-bar='true'>
   <ion-content>
     <div class="title-bar" id="order-card">Orders
       <span class="back-button" ng-click="back()">
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div class="list-area centered">
+      <div class="list-area centered" ng-show='currentUser.role=="Customer"'>
         <div class="row" style="font-weight:bold; background: #c99bf3; color: white">
           <div class='col'>Inventory</div>
           <div class='col'>Status</div>
@@ -41,6 +41,39 @@
         </div>
       </div>
 
+      <div class="list-area centered" ng-show='currentUser.role!="Customer"'>
+        <!-- <div class="row" style="font-weight:bold; background: #c99bf3; color: white">
+            <div class='col'>Inventory</div>
+            <div class='col'>Status</div>
+            <div class='col'>Price</div>
+            <div class='col'></div>
+          </div> -->
+        <!-- <div class="row inventory-item" ng-repeat="order in orderListForEmp track by $index">
+          <div style='display:block'>Status: {{order.orderStatus}}</div>
+          <h4 style='display:block'>order# {{order.orderId}}</h4>
+          <div style='display:inline; padding-left:4%;padding-right: 4%;'>{{order.iName}}</div>
+          <div style='display:inline; padding-left:4%;padding-right: 4%;'>${{order.price}}</div>
+          <button class="button button-outline button-positive tight-line-button"
+            ng-click="showInventoryPopup(inventory)">
+            CheckOut
+          </button>
+          <button class="button button-outline button-positive tight-line-button"
+            ng-click="showInventoryPopup(inventory)">
+            Cancel
+          </button>
+        </div> -->
+        <div class="inventory-item" style="padding: 5% !important;"ng-repeat="order in orderListForEmp track by $index">
+            <div style='display:block'><b>Status:</b> {{order.orderStatus}}</div>
+            <div style='display:block'>{{order.orderTime}}</b>
+            <h4 style='display:block'>order# {{order.orderId}}</h4>
+            <button class="button button-outline button-positive tight-line-button"
+                ng-click="startOrder(order)">
+                Start
+              </button>
+          </div>
+      </div>
+    </div>
+
     </div>
 
     <div class="bar bar-footer user-info-footer">
@@ -60,7 +93,7 @@
         <ion-header-bar>
           <h1 class="title" style='background:#886aea; color: white; margin: 0;'>Order History</h1>
         </ion-header-bar>
-        <ion-content>
+        <ion-content style='top: 44px !important'>
           <div class="inventory-item" style="padding: 5% !important;"ng-repeat="history in historyList track by $index">
             <div style='display:block'>Status: {{history.orderStatus}}</div>
             <h4 style='display:block'>order# {{history.orderId}}</h4>
@@ -75,6 +108,22 @@
                 Cancel
               </button>
           </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+    <script id="startOrderModal.html" type="text/ng-template">
+      <ion-modal-view>
+        <!-- <ion-header-bar>
+          <h1 class="title" style='background:#886aea; color: white; margin: 0;'>Order History</h1>
+        </ion-header-bar> -->
+        <ion-content>
+          <div style='margin: 5%;'>
+          <h4>Location: {{orderInventory.location}}</h4>
+          <h1 style='text-align: center; border-bottom: 1px black dashed; padding-bottom: 5%;'>{{beacon.rssi}}</h1>
+          <img ng-click="startScan()" style="margin: auto; display: block;width: 90%; height: 90%"src="./img/scan.png">
+          <h4 style="margin: auto; display: block; text-align: center;">Scan the barcode or QR code of the inventory</h4>
+        </div>
         </ion-content>
       </ion-modal-view>
     </script>

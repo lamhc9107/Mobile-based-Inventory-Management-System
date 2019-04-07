@@ -1,14 +1,14 @@
 angular.module('fyp.menuController', [])
 
-    .controller('MenuCtrl', function ($scope, $ionicPopup, $state, $location, $localStorage) {
+    .controller('MenuCtrl', function ($scope, $ionicPopup, $state, $location, $localStorage, apiService) {
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
-
-        $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
+        $scope.$on("$ionicView.beforeEnter", function (scopes, states) {
             $scope.storageInit();
+            getOrderList();
         });
-        $scope.$on( "$ionicView.enter", function( scopes, states ) {
+        $scope.$on("$ionicView.enter", function (scopes, states) {
             functionCardHide();
         });
 
@@ -17,12 +17,32 @@ angular.module('fyp.menuController', [])
             switch ($scope.currentUser.role) {
                 case "Customer":
                     $("#user-manage-card").hide();
-                    // $("#inventory-management-card").hide();
+                    $("#inventory-management-card").hide();
                     break;
+
                 default:
+                    $("#user-manage-card").show();
+                    $("#inventory-management-card").show();
+                    break;
             }
         }
 
+        function getOrderList() {
+            apiService.getOrderList().then(function (data) {
+                $scope.pendingCount = 0;
+                $scope.orderList = data;
+                console.log("Order List: ");
+                console.log($scope.orderList);
+
+                for (var i = 0; i < $scope.orderList.length; i++) {
+                    if ($scope.orderList[i].orderStatus == "Pending") {
+                        $scope.pendingCount = $scope.pendingCount + 1
+                    }
+                }
+                console.log($scope.pendingCount)
+                $scope.$apply();
+            });
+        }
 
         $scope.storageInit = function () {
             if ($localStorage.currentUser == undefined) {
@@ -38,7 +58,7 @@ angular.module('fyp.menuController', [])
             delete $localStorage.currentUser;
             $state.go('tab.login');
         }
-        
+
         $scope.functionCardClick = function (functionCard) {
             console.log(functionCard.target.id + " clicked !")
             switch (functionCard.target.id) {
@@ -56,6 +76,9 @@ angular.module('fyp.menuController', [])
                     break;
                 case "user-profile-card":
                     $state.go('tab.userProfile');
+                    break;
+                case "order-card-inside":
+                    $state.go('tab.order');
                     break;
                 default:
                     console.log("Wrong function card id !")
@@ -78,24 +101,11 @@ angular.module('fyp.menuController', [])
             location.reload();
         }
 
-        $scope.beacons = []
-
-        $scope.startScanBeacon = function(){
-            console.log("start scan")
-            ble.startScan([], function(device) {
-                console.log(JSON.stringify(device));
-                $scope.beacons.push(device)
-            }, );
-            
-            setTimeout(ble.stopScan,
-                5000,
-                function() { console.log("Scan complete"); },
-                function() { console.log("stopScan failed"); }
-            );
-
-        }
-
         
+
+
+
+
 
         // $cordovaBluetoothLE.initialize({request:true}).then(null,
         //     function(obj) {
@@ -127,9 +137,9 @@ angular.module('fyp.menuController', [])
         // $scope.beacons = [];
 
         // $ionicPlatform.ready(function() {
-    
+
         //     $cordovaBeacon.requestWhenInUseAuthorization();
-    
+
         //     $rootScope.$on("$cordovaBeacon:didRangeBeaconsInRegion", function(event, pluginResult) {
         //         var uniqueBeaconKey;
         //         for(var i = 0; i < pluginResult.beacons.length; i++) {
@@ -138,9 +148,9 @@ angular.module('fyp.menuController', [])
         //         }
         //         $scope.$apply();
         //     });
-    
+
         //     $cordovaBeacon.startRangingBeaconsInRegion($cordovaBeacon.createBeaconRegion("estimote", "b9407f30-f5f8-466e-aff9-25556b57fe6d"));
-    
+
         // });
 
     })

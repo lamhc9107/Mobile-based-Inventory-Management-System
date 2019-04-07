@@ -99,9 +99,9 @@ angular.module('fyp.userManageController', [])
                 'Role'+
                 '</div>'+
                 '<select ng-model="createUserform.role">'+
-                '<option ng-value="admin">Admin</option>'+
-                '<option ng-value="employee">Employee</option>'+
-                '<option ng-value="customer">Customer</option>'+
+                '<option ng-value="Admin">Admin</option>'+
+                '<option ng-value="Employee">Employee</option>'+
+                '<option ng-value="Customer">Customer</option>'+
                 '</select>'+
                 '</label>'+
                 '</div>'

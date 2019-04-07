@@ -1,4 +1,4 @@
-<ion-view view-title="InvenManage">
+<ion-view view-title="InvenManage" hide-nav-bar='true'>
   <ion-content>
     <div class="title-bar" id="inventory-management-card">Inventory Management
       <span class="back-button" ng-click="back()">
@@ -74,6 +74,31 @@
         </div>
       </div>
     </div>
+
+    <script id="inventoryModal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar>
+          <h1 class="title" style='background:#886aea; color: white; margin: 0;'>Order History</h1>
+        </ion-header-bar>
+        <ion-content>
+            <div class="row">
+              <div class="col" style="font-weight:bold">ItemId </div> 
+              <div class="col">{{inventory.itemId}}</div>
+            </div> 
+            <div class="row">
+              <div class="col" style="font-weight:bold">ProductId</div>
+              <div class="col">{{inventory.productId}}</div>
+            </div> <div class="row">
+              <div class="col" style="font-weight:bold"> Check-in time </div> 
+              <div class="col">{{inventory.checkInTime}}</div>
+            </div>
+            <div class="row">
+              <div class="col" style="font-weight:bold">Distance </div>
+              <div class="col">{{inventory.distance}}</div>
+            </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
 
   </ion-content>
 </ion-view>

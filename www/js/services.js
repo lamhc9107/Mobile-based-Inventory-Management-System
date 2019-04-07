@@ -296,6 +296,17 @@ angular.module('fyp.services', [])
         // }, function myError(response) {
 
         // })
+      },
+      updateOrderStatus: function (_orderId, _status) {
+        var data;
+        data = {
+          orderStatus: _status,
+        }
+
+        return db.collection("orders").doc(_orderId).update(data)
+          .then(function () {
+            return console.log("orderId: " + _orderId + " edited!");
+          });
       }
 
     }
