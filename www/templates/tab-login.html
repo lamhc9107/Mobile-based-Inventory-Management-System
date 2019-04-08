@@ -20,8 +20,52 @@
             </div>
         </div>
         <!-- <div class=""><i class="fas fa-plus-square"></i> Register </div> -->
-        <button class="button button-block button-balanced register-button" ng-click="goRegisterPage()">
+        <button class="button button-block button-balanced register-button" ng-click="customerRegister()">
             <i class="fas fa-plus-square"></i> Register
         </button>
+
+        <script id="customerRegisterModal.html" type="text/ng-template">
+            <ion-modal-view style="min-height: 70%;">
+              <!-- <ion-header-bar>
+                <h1 class="title" style='background:#886aea; color: white; margin: 0;'>Order History</h1>
+              </ion-header-bar> -->
+              <ion-content>
+                    <div class="list">
+                            <label class="item item-input item-stacked-label">
+                            <span class="input-label">Username</span>
+                            <input type="text" ng-model="createUserform.username" placeholder="5 characters or more">
+                            </label>
+                            <label class="item item-input item-stacked-label">
+                            <span class="input-label">Password</span>
+                            <input type="text" ng-model="createUserform.password" placeholder="5 characters or more">
+                            </label>
+                            <label class="item item-input item-stacked-label">
+                            <span class="input-label">Re-enter password</span>
+                            <input type="text" ng-model="createUserform.rePassword" placeholder="">
+                            </label>
+                            <label class="item item-input item-stacked-label">
+                            <span class="input-label">Email</span>
+                            <input type="text" ng-model="createUserform.email" placeholder="Email address">
+                            </label>
+                            <label class="item item-input item-stacked-label">
+                            <span class="input-label">Phone</span>
+                            <input type="text" ng-model="createUserform.phone" placeholder="Phone number">
+                            </label>
+                            <!-- <label class="item item-input item-select">
+                            <div class="input-label">
+                            Role
+                            </div>
+                            <select ng-model="createUserform.role">
+                            <option ng-value="Admin">Admin</option>
+                            <option ng-value="Employee">Employee</option>
+                            <option ng-value="Customer">Customer</option>
+                            </select>
+                            </label> -->
+                            </div>
+                            <button class="button button-positive" style='display: block;float: right;margin: 5%;' ng-click="submitCustomerRegister()">Submit</button>
+              </ion-content>
+            </ion-modal-view>
+          </script>
+
     </ion-content>
 </ion-view>

@@ -1,58 +1,79 @@
 <ion-view view-title="InvenManage" hide-nav-bar='true'>
-    <ion-content>
-      <div class="title-bar" id="message-card">Message
-        <span class="back-button" ng-click="back()">
-          <i class="fas fa-chevron-left"></i> Back</span>
-      </div>
-      <div class="button-group">
-  
-        <div class="row">
-          <div class="col employeeOnlyFunction">
-            <button class="button button-energized centered" style="width: 90%;">
-              Find User
-            </button>
-          </div>
-          <div class="col">
-            <button class="button button-energized centered" style="width: 90%;">
-              Delete User
-            </button>
-          </div>
+  <ion-content>
+    <div class="title-bar" id="message-card">Message
+      <span class="back-button" ng-click="back()">
+        <i class="fas fa-chevron-left"></i> Back</span>
+    </div>
+    <div class="button-group">
+
+      <div class="row">
+        <div class="col employeeOnlyFunction">
+          <button class="button button-energized centered" style="width: 90%;" ng-click='newMessage()'>
+            New Message
+          </button>
         </div>
-  
-        <div class="list-area centered">
-          <div class="row" style="font-weight:bold; background: #ff9900; color: white">
-            <div class='col'>User Id</div>
-            <div class='col'>Name</div>
-            <div class='col'>Role</div>
+        <div class="col">
+          <!-- <button class="button button-energized centered" style="width: 90%;">
+            Delete User
+          </button> -->
+        </div>
+      </div>
+
+      <div class="list-area centered">
+        <div class="row" style="font-weight:bold; background: #ff9900; color: white">
+            <div class='col col-50'>Message</div>
+            <div class='col'>Time</div>
+            <!-- <div class='col'></div> -->
             <div class='col'></div>
           </div>
-          <div class="row inventory-item" ng-repeat="user in userList">
-            <div class="row">
-              <div class='col'>{{user.userId}}</div>
-              <div class='col'>{{user.username}}</div>
-              <div class='col'>{{user.role}}</div>
-              <div class='col'>
-                <button class="button button-outline button-energized tight-line-button" ng-click="showUserPopup(user)">
-                  Detail
-                </button>
-              </div>
+        <div class="row inventory-item" ng-repeat="message in messageList">
+          <div class="row">
+            <div class='col col-50'>{{message.content}}</div>
+            <div class='col'>{{message.messageTime}}</div>
+            <div class='col'>
+              <button class="button button-outline button-energized tight-line-button" ng-click="showUserPopup(user)">
+                Detail
+              </button>
             </div>
           </div>
         </div>
-  
       </div>
-  
-      <div class="bar bar-footer user-info-footer">
-        <div class="row">
-          <div class='col-75'>
-            <b>Welcome ! </b>{{testUser.username}} (Manager)</div>
-          <div class='col'>
-            <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
-              Logout
-            </button>
-          </div>
+
+    </div>
+
+    <div class="bar bar-footer user-info-footer">
+      <div class="row">
+        <div class='col-75'>
+          <b>Welcome ! </b>{{currentUser.username}} ({{currentUser.role}})</div>
+        <div class='col'>
+          <button class="button button-dark tight-line-button float-right-button" ng-click="logout()">
+            Logout
+          </button>
         </div>
       </div>
-  
-    </ion-content>
-  </ion-view>
+    </div>
+
+    <script id="newMessageModal.html" type="text/ng-template">
+        <ion-modal-view style="min-height: 50%">
+          <!-- <ion-header-bar>
+            <h1 class="title" style='background:#886aea; color: white; margin: 0;'>Order History</h1>
+          </ion-header-bar> -->
+          <ion-content scroll='false'style='padding: 5% !important;'>
+            <h4>New Message</h4>
+              <label class="item item-input item-select">
+                  <div class="input-label">
+                    Order Ref
+                  </div>
+                  <select ng-options="order.orderId as order.orderId for order in orderList track by $index" ng-model="newMessageObj.orderId">
+                  </select>
+                </label>
+              <textarea ng-model='newMessageObj.message' rows='6'style='border: black 1px solid;display: block; margin:auto; margin-top: 10%;width:100%; height: 40%; padding: 3%;'> </textarea>
+                <button class="button button-positive" style='margin: 5%; float: right;'ng-click="sendMessage()">
+                    Submit
+                  </button>
+          </ion-content>
+        </ion-modal-view>
+      </script>
+
+  </ion-content>
+</ion-view>

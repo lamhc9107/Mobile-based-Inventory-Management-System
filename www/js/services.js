@@ -307,7 +307,30 @@ angular.module('fyp.services', [])
           .then(function () {
             return console.log("orderId: " + _orderId + " edited!");
           });
-      }
+      },
+      getMessageList: function () {
+        return db.collection("messages").get().then((querySnapshot) => {
+          var data = [];
+          querySnapshot.forEach((doc) => {
+            data.push(_.extend({ messagesId: doc.id }, doc.data()));
+          });
+          console.log("getMessageList finished")
+          return data;
+        });
+      },
+      createMessage: function (_message, _orderId, _userId) {
+        return db.collection("messages").add({
+          content: _message,
+          orderId: _orderId,
+          messageTime: moment().format(),
+          refId:'',
+          stack: 0,
+          userId: _userId
+        })
+          .then(function (docRef) {
+            return console.log("message: " + docRef.id + " created!");
+          });
+      },
 
     }
   })

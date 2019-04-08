@@ -1,6 +1,6 @@
 angular.module('fyp.loginController', ['ngStorage'])
 
-    .controller('LoginCtrl', function ($scope, $ionicPopup, $state, $location, $http, apiService, $localStorage, $cordovaBeacon) {
+    .controller('LoginCtrl', function ($scope, $ionicPopup, $state, $location, $http, apiService, $localStorage, $cordovaBeacon, $ionicModal) {
 
         $scope.userList = [];
 
@@ -8,6 +8,7 @@ angular.module('fyp.loginController', ['ngStorage'])
         // $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.testUser = { username: 'test123', password: 'test123' };
+        $scope.createUserform = {username:'',password:'',rePassword:'',email:'',role:'Customer'};
 
         $scope.userLogin = function (username, password) {
             console.log("User login request");
@@ -63,6 +64,48 @@ angular.module('fyp.loginController', ['ngStorage'])
             });
 
 
+        }
+
+        $ionicModal.fromTemplateUrl('customerRegisterModal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function (customerRegisterModal) {
+            $scope.customerRegisterModal = customerRegisterModal;
+        });
+        $scope.openCustomerRegisterModal = function () {
+            $scope.customerRegisterModal.show();
+        };
+        $scope.closeCustomerRegisterModal = function () {
+            $scope.customerRegisterModal.hide();
+        };
+        //Cleanup the modal when we're done with it!
+        $scope.$on('$destroy', function () {
+            $scope.customerRegisterModal.remove();
+        });
+
+        $scope.customerRegister= function(){
+            $scope.openCustomerRegisterModal();
+
+        }
+        $scope.submitCustomerRegister = function(){
+            console.log($scope.createUserform);
+            if ($scope.createUserform.password != $scope.createUserform.rePassword) {
+                invaildDesc = "Passwords are not matched ! Please enter again !"
+                var loginInvaildPopup = $ionicPopup.confirm({
+                    title: 'Invaild password !',
+                    template: invaildDesc
+                });
+                return;
+            }
+            apiService.createNewUser($scope.createUserform).then(function (data) {
+                swal({
+                    title: "Sccess !",
+                    // text: "Inventory has been created!",
+                    icon: "success",
+                }).then((value) => {
+                    location.reload();
+                });
+            });
         }
 
         $scope.goMenuPage = function () {
