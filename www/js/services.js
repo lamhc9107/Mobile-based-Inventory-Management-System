@@ -312,7 +312,7 @@ angular.module('fyp.services', [])
         return db.collection("messages").get().then((querySnapshot) => {
           var data = [];
           querySnapshot.forEach((doc) => {
-            data.push(_.extend({ messagesId: doc.id }, doc.data()));
+            data.push(_.extend({ messageId: doc.id }, doc.data()));
           });
           console.log("getMessageList finished")
           return data;
@@ -325,6 +325,19 @@ angular.module('fyp.services', [])
           messageTime: moment().format(),
           refId:'',
           stack: 0,
+          userId: _userId
+        })
+          .then(function (docRef) {
+            return console.log("message: " + docRef.id + " created!");
+          });
+      },
+      replyMessage: function (_message, _stack, _userId, _refId, _orderId) {
+        return db.collection("messages").add({
+          content: _message,
+          orderId: _orderId,
+          messageTime: moment().format(),
+          refId:_refId,
+          stack: _stack,
           userId: _userId
         })
           .then(function (docRef) {

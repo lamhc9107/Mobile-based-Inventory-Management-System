@@ -21,17 +21,18 @@
 
       <div class="list-area centered">
         <div class="row" style="font-weight:bold; background: #ff9900; color: white">
-            <div class='col col-50'>Message</div>
-            <div class='col'>Time</div>
-            <!-- <div class='col'></div> -->
-            <div class='col'></div>
-          </div>
-        <div class="row inventory-item" ng-repeat="message in messageList">
+          <div class='col col-50'>Message</div>
+          <div class='col'>Time</div>
+          <!-- <div class='col'></div> -->
+          <div class='col'></div>
+        </div>
+        <div class="row inventory-item" ng-repeat="message in showMessageList">
           <div class="row">
             <div class='col col-50'>{{message.content}}</div>
             <div class='col'>{{message.messageTime}}</div>
             <div class='col'>
-              <button class="button button-outline button-energized tight-line-button" ng-click="showUserPopup(user)">
+              <button class="button button-outline button-energized tight-line-button"
+                ng-click="showMessagePopup(message)">
                 Detail
               </button>
             </div>
@@ -69,6 +70,33 @@
                 </label>
               <textarea ng-model='newMessageObj.message' rows='6'style='border: black 1px solid;display: block; margin:auto; margin-top: 10%;width:100%; height: 40%; padding: 3%;'> </textarea>
                 <button class="button button-positive" style='margin: 5%; float: right;'ng-click="sendMessage()">
+                    Submit
+                  </button>
+          </ion-content>
+        </ion-modal-view>
+      </script>
+
+    <script id="messageDetailModal.html" type="text/ng-template">
+        <ion-modal-view style="min-height: 80%">
+          <!-- <ion-header-bar>
+            <h1 class="title" style='background:#886aea; color: white; margin: 0;'>Order History</h1>
+          </ion-header-bar> -->
+          <ion-content scroll='false'style='padding: 5% !important;'>
+            <h4>Message to: {{getUserById(currentChat.userId).username}}</h4>
+            <ion-scroll style='height: 60%'>
+            <div class="card" ng-repeat='chat in currentChatList track by chat.messageId| orderBy:"stack"' style='background: #f1f1f1'>
+                <div style='color: grey; padding-left: 2%; font-weight:bold'>{{getUserById(chat.userId).username}} ({{getUserById(chat.userId).role}})</div>
+              <div class="item item-text-wrap" style='border:0'>
+                  
+                {{chat.content}}
+              </div>
+
+              <div style='color: grey; padding-right: 2%; text-align: right; font-size: 0.8em'>{{chat.messageTime}}</div>
+            </div>
+          </ion-scroll>
+             
+              <textarea ng-model='newMessageObj.message' rows='6'style='border: black 1px solid;display: block; margin:auto; margin-top: 5%;width:90%; height: 20%; padding: 3%; position: fixed;bottom: 13%;'> </textarea>
+                <button class="button button-positive" style='margin: 5%;position: fixed;bottom: 0;right: 0;'ng-click="replyMessage()">
                     Submit
                   </button>
           </ion-content>

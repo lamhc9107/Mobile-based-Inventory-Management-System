@@ -105,7 +105,7 @@ angular.module('fyp.userManageController', [])
                 '</select>'+
                 '</label>'+
                 '</div>'
-            var myPopup = $ionicPopup.show({
+            var userPopup = $ionicPopup.show({
                 template: userPopupTemplate,
                 title: "Create new user",
                 //subTitle: 'Subtitle',
@@ -141,11 +141,11 @@ angular.module('fyp.userManageController', [])
             if (user.role == "Customer") {
                 userPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">UserId </div> <div class="col">' + user.userId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">Role</div><div class="col"> ' + user.role + '</div></div><div class="row"><div class="col" style="font-weight:bold">Email </div> <div class="col">' + user.email + ' </div></div><div class="row"><div class="col" style="font-weight:bold">Phone </div> <div class="col">' + user.phone + ' </div></div>'
             } else {
-                userPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">UserId </div> <div class="col">' + user.userId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">Role</div><div class="col"> ' + user.role + '</div></div><div class="row"><div class="col" style="font-weight:bold">Email </div> <div class="col">' + user.email + ' </div></div><div class="row"><div class="col" style="font-weight:bold">Phone </div> <div class="col">' + user.phone + ' </div></div>'
+                userPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">UserId </div> <div class="col">' + user.userId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">Role <i class="fas fa-edit"></i></div><div class="col"> ' + user.role + '</div></div><div class="row"><div class="col" style="font-weight:bold">Email </div> <div class="col">' + user.email + ' </div></div><div class="row"><div class="col" style="font-weight:bold">Phone </div> <div class="col">' + user.phone + ' </div></div>'
             }
             var myPopup = $ionicPopup.show({
                 template: userPopupTemplate,
-                title: user.username,
+                title: user.username + '  <i class="fas fa-edit"></i>',
                 //subTitle: 'Subtitle',
                 scope: $scope,
 

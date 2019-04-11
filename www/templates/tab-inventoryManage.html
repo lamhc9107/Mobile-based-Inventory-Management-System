@@ -20,14 +20,14 @@
 
       <div class="row">
         <div class="col">
-          <button class="button button-calm centered" style="width: 90%;">
+          <button class="button button-calm centered" style="width: 90%;" ng-click='findInventoryById()'>
             Find (QR code)
           </button>
         </div>
         <div class="col">
-          <!-- <button class="button button-calm centered" style="width: 90%;">
-            Find (Id)
-          </button> -->
+          <button class="button button-calm centered" style="width: 90%;" ng-click="findInventoryByName()">
+            Find (Name)
+          </button>
         </div>
       </div>
 
@@ -36,11 +36,16 @@
           <div class='col'>Inventory</div>
           <div class='col'>Status</div>
           <div class='col'>Location</div>
-          <div class='col'></div>
+          <div class='col'>
+            <button class="button button-outline button-light tight-line-button"
+            ng-click="resetFilter()" ng-show='inventoryList != showInventoryList'>
+            Reset
+          </button>
+        </div>
           <!-- <div class='col'></div> -->
         </div>
         <div class="scroll-area">
-          <div class="row inventory-item" ng-repeat="inventory in inventoryList track by $index">
+          <div class="row inventory-item" ng-repeat="inventory in showInventoryList track by $index">
             <div class="row">
               <div class='col'>{{inventory.iName}}</div>
               <div class='col'>{{inventory.status}}</div>
