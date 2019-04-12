@@ -62,7 +62,7 @@
             Cancel
           </button>
         </div> -->
-        <div class="inventory-item" style="padding: 5% !important;"ng-repeat="order in orderListForEmp track by $index">
+        <div class="inventory-item" style="padding: 5% !important;"ng-repeat="order in orderListForEmp | orderBy:'-orderTime'">
             <div style='display:block'><b>Status:</b> {{order.orderStatus}}</div>
             <div style='display:block'>{{order.orderTime}}</b>
             <h4 style='display:block'>order# {{order.orderId}}</h4>

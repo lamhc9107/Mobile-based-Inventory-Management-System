@@ -84,7 +84,7 @@ angular.module('fyp.orderController', [])
         $scope.startScanBeaconById = function (_id) {
             return new Promise((resolve, reject) => {
                 console.log("start scan")
-                var scanInverval = setInterval(function () {
+                scanInverval = setInterval(function () {
                     ble.startScan([], function (device) {
                         // console.log(JSON.stringify(device));
                         if (_id == device.id) {
@@ -98,7 +98,7 @@ angular.module('fyp.orderController', [])
                         function () { console.log("Scan complete"); resolve('success') },
                         function () { console.log("stopScan failed"); reject(new Error('something wrong')) }
                     );
-                }, 3000);
+                }, 1500);
             })
         }
 
@@ -212,13 +212,15 @@ angular.module('fyp.orderController', [])
             clearInterval(scanInverval);
         });
         // Execute action on hide modal
-        $scope.$on('startOrderModal.hidden', function () {
+        $scope.$on('modal.hidden', function () {
             // Execute action
+            console.log("hidden event")
             clearInterval(scanInverval);
         });
         // Execute action on remove modal
-        $scope.$on('startOrderModal.removed', function () {
+        $scope.$on('modal.removed', function () {
             // Execute action
+            console.log("removed event")
             clearInterval(scanInverval);
         });
 

@@ -15,17 +15,19 @@ angular.module('fyp.loginController', ['ngStorage'])
             console.log("Username: " + $scope.formUser.username + ", Password: " + $scope.formUser.password)
             checkUserLogin();
         }
-        //   firebase.database().ref('users/' + '1234').set({
-        //     username: 'test',
-        //     email: 'test'
-        //   });
 
-
-        //   var userId = firebase.auth().currentUser.uid;
-        //   return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
-        //     var username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
-        //     console.log(username);
-        //   });
+        $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
+            getUserList();
+        });
+        
+        function getUserList() {
+            apiService.getUserList().then(function (data) {
+                $scope.userList = data;
+                console.log("User List: " + $scope.userList);
+                console.log($scope.userList);
+                $scope.$apply();
+            });
+        }
 
         function checkUserLogin() {
             apiService.getUserList().then(function (data) {
@@ -97,6 +99,34 @@ angular.module('fyp.loginController', ['ngStorage'])
                 });
                 return;
             }
+            
+            for(var i = 0; i< $scope.userList.length ; i++){
+                if ($scope.createUserform.username == $scope.userList[i].username) {
+                    invaildDesc = "Username has already been used !"
+                    var loginInvaildPopup = $ionicPopup.confirm({
+                        title: 'Invaild username !',
+                        template: invaildDesc
+                    });
+                    return;
+                }
+                if ($scope.createUserform.email == $scope.userList[i].email) {
+                    invaildDesc = "Email has already been used !"
+                    var loginInvaildPopup = $ionicPopup.confirm({
+                        title: 'Invaild email !',
+                        template: invaildDesc
+                    });
+                    return;
+                }
+                if ($scope.createUserform.phone == $scope.userList[i].phone) {
+                    invaildDesc = "Phone number has already been used !"
+                    var loginInvaildPopup = $ionicPopup.confirm({
+                        title: 'Invaild phone number !',
+                        template: invaildDesc
+                    });
+                    return;
+                }
+            }
+
             apiService.createNewUser($scope.createUserform).then(function (data) {
                 swal({
                     title: "Sccess !",

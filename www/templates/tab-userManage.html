@@ -25,10 +25,15 @@
           <!-- <div class='col'>User Id</div> -->
           <div class='col'>Name</div>
           <div class='col'>Role</div>
-          <div class='col'></div>
+          <div class='col'>
+            <button class="button button-outline button-light tight-line-button" ng-click="resetFilter()"
+              ng-show='userList != showUserList'>
+              Reset
+            </button>
+          </div>
         </div>
         <ion-scroll>
-          <div class="row inventory-item" ng-repeat="user in userList track by $index">
+          <div class="row inventory-item" ng-repeat="user in showUserList track by $index">
             <div class="row">
               <!-- <div class='col'>{{user.userId}}</div> -->
               <div class='col'>{{user.username}}</div>
@@ -55,6 +60,52 @@
         </div>
       </div>
     </div>
+
+    <script id="editUserModal.html" type="text/ng-template">
+      <ion-modal-view style="min-height: 80%;">
+          <ion-header-bar>
+            <h1 class="title" style='background:#387ef5; color: white; margin: 0;'>Edit User</h1>
+          </ion-header-bar>
+          <ion-content style='top: 8% !important;'>
+                <div class="list">
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">Username</span>
+                        <input type="text" ng-model="editUserform.username" placeholder="5 characters or more">
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">New Password</span>
+                        <input type="password" ng-model="editUserform.newPassword" placeholder="5 characters or more">
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">Re-enter new password</span>
+                        <input type="password" ng-model="editUserform.rePassword" placeholder="">
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">Email</span>
+                        <input type="text" ng-model="editUserform.email" placeholder="Email address">
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">Phone</span>
+                        <input type="text" ng-model="editUserform.phone" placeholder="Phone number">
+                        </label>
+                        <label class="item item-input item-select">
+                        <div class="input-label">
+                        Role
+                        </div>
+                        <select ng-model="editUserform.role">
+                        <option ng-value="Admin">Admin</option>
+                        <option ng-value="Employee">Employee</option>
+                        <option ng-value="Customer">Customer</option>
+                        </select>
+                        </label>
+                        </div>
+                        <button class="button button-positive" style='display: block;float: right;margin: 3%;' ng-click="submitUserEdit()">Submit</button>
+                        <button class="button button-positive" style='display: block;float: right;margin: 3%;' ng-click="deleteUserAlert(editUserform.userId)">Delete</button>
+                        <button class="button button-stable" style='display: block;float: right;margin: 3%;' ng-click="closeEditUserModalModal()">Cancel</button>
+                        
+          </ion-content>
+        </ion-modal-view>
+    </script>
 
   </ion-content>
 </ion-view>

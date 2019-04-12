@@ -105,22 +105,11 @@ angular.module('fyp.services', [])
       },
       deleteUser: function (_userId) {
         console.log(_userId);
-        return $http({
-          method: "DELETE",
-          url: apiUrl + "users",
-          // withCredentials: true,
-          data: {
-            userId: Number(_userId),
-          },
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        }).then(function mySucces(response) {
-          // console.log(response);
-          return response;
-        }, function myError(response) {
-
-        })
+        return db.collection("users").doc(_userId).delete().then(function () {
+          return console.log(_userId +"successfully deleted!");
+        }).catch(function (error) {
+          return console.error("Error removing document: ", error);
+        });
       },
       updateUser: function (_userId, editUserForm) {
         var data;
@@ -141,25 +130,30 @@ angular.module('fyp.services', [])
           .then(function () {
             return console.log("userId: " + _userId + " edited!");
           });
+      },
+      updateUserAdmin: function (_userId, editUserForm) {
+        var data;
+        if (editUserForm.newPassword == '' || editUserForm.newPassword == null) {
+          data = {
+            username: editUserForm.username,
+            email: editUserForm.email,
+            phone: editUserForm.phone,
+            role: editUserForm.role
+          }
+        } else {
+          data = {
+            username: editUserForm.username,
+            password: editUserForm.newPassword,
+            email: editUserForm.email,
+            phone: editUserForm.phone,
+            role: editUserForm.role
+          }
+        }
 
-        // console.log(editUserForm);
-        // return $http({
-        //   method: "PUT",
-        //   url: apiUrl + "users",
-        //   data: {
-        //     userId: Number(_userId),
-        //     username: editUserForm.username,
-        //     password: editUserForm.newPassword,
-        //     email: editUserForm.email
-        //   },
-        //   headers: {
-        //     'Content-Type': 'application/x-www-form-urlencoded'
-        //   }
-        // }).then(function mySucces(response) {
-        //   return response;
-        // }, function myError(response) {
-
-        // })
+        return db.collection("users").doc(_userId).update(data)
+          .then(function () {
+            return console.log("userId: " + _userId + " edited!");
+          });
       },
 
       getInventoryList: function () {
@@ -323,7 +317,7 @@ angular.module('fyp.services', [])
           content: _message,
           orderId: _orderId,
           messageTime: moment().format(),
-          refId:'',
+          refId: '',
           stack: 0,
           userId: _userId
         })
@@ -336,7 +330,7 @@ angular.module('fyp.services', [])
           content: _message,
           orderId: _orderId,
           messageTime: moment().format(),
-          refId:_refId,
+          refId: _refId,
           stack: _stack,
           userId: _userId
         })

@@ -157,17 +157,6 @@ angular.module('fyp.inventoryManageController', [])
         $scope.beacons = [];
 
         $scope.startScanBeacon = function () {
-            // console.log("start scan")
-            // ble.startScan([], function (device) {
-            //     console.log(JSON.stringify(device));
-            //     $scope.beacons.push(device)
-            // });
-
-            // setTimeout(ble.stopScan,
-            //     2000,
-            //     function () { console.log("Scan complete"); },
-            //     function () { console.log("stopScan failed"); }
-            // );
             return new Promise((resolve, reject) => {
                 console.log("start scan")
                 var scanInverval = setInterval(function () {
@@ -177,6 +166,27 @@ angular.module('fyp.inventoryManageController', [])
                         $scope.beacons.push(device);
                     });
 
+                    setTimeout(ble.stopScan,
+                        2000,
+                        function () { console.log("Scan complete"); resolve('success') },
+                        function () { console.log("stopScan failed"); reject(new Error('something wrong')) }
+                    );
+                }, 3000);
+            })
+        }
+
+        $scope.startScanBeaconById = function (_id) {
+            return new Promise((resolve, reject) => {
+                console.log("start scan")
+                    scanInverval = setInterval(function () {
+                    ble.startScan([], function (device) {
+                        // console.log(JSON.stringify(device));
+                        if (_id == device.id) {
+                            $scope.beacon = device
+                            console.log($scope.beacon.rssi)
+                            $scope.$apply();
+                        }
+                    });
                     setTimeout(ble.stopScan,
                         2000,
                         function () { console.log("Scan complete"); resolve('success') },
@@ -224,15 +234,16 @@ angular.module('fyp.inventoryManageController', [])
             // $scope.inventory.checkInTime = moment(inventory.checkInTime).format('MMMM Do YYYY, h:mm:ss a')
             // $scope.startScanBeacon();
             // $scope.openInventoryModal();
-            $scope.startScanBeacon().then(function (data) {
                 console.log(JSON.stringify($scope.inventory))
-                for (var i = 0; i < $scope.beacons.length; i++) {
-                    if ($scope.beacons[i].id == inventory.beacon) {
-                        $scope.inventory.distance = rssiToDistance($scope.beacons[i].rssi).toFixed(2);
-                    }
-                }
+                // for (var i = 0; i < $scope.beacons.length; i++) {
+                //     if ($scope.beacons[i].id == inventory.beacon) {
+                //         $scope.inventory.distance = rssiToDistance($scope.beacons[i].rssi).toFixed(2);
+                //     }
+                // }
 
-                inventoryPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">ItemId </div> <div class="col">' + inventory.itemId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">ProductId</div><div class="col"> ' + inventory.productId + '</div></div> <div class="row"><div class="col" style="font-weight:bold"> Check-in time </div> <div class="col"> ' + moment(inventory.checkInTime).format('MMMM Do YYYY, h:mm:ss a') + '</div></div><div class="row"><div class="col" style="font-weight:bold">Distance </div> <div class="col"><span class="biggerText">{{inventory.distance}} M</span></div></div>'
+                $scope.startScanBeaconById(inventory.beacon)
+
+                inventoryPopupTemplate = '<div class="row"><div class="col" style="font-weight:bold">ItemId </div> <div class="col">' + inventory.itemId + '</div></div> <div class="row"><div class="col" style="font-weight:bold">ProductId</div><div class="col"> ' + inventory.productId + '</div></div> <div class="row"><div class="col" style="font-weight:bold"> Check-in time </div> <div class="col"> ' + moment(inventory.checkInTime).format('MMMM Do YYYY, h:mm:ss a') + '</div></div><div class="row"><div class="col" style="font-weight:bold">Distance </div> <div class="col"><span class="biggerText">{{beacon.rssi}} M</span></div></div>'
                 var inventoryDetailPopup = $ionicPopup.show({
                     //templateUrl: 'templates/popup/inventory-popup.html',
                     template: inventoryPopupTemplate,
@@ -261,7 +272,6 @@ angular.module('fyp.inventoryManageController', [])
                     clearInterval(scanInverval)
                 });
 
-            });
 
         };
 
