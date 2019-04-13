@@ -7,7 +7,7 @@ angular.module('fyp.orderController', [])
         // $scope.inventoryList = [];
         $scope.deleteInventoryId;
         $scope.createInventoryForm = { productId: '', iName: '', checkInTime: '', distance: '', status: '', price: '', location: '' };
-        $scope.beacon = { rssi: "Not found" }
+        $scope.beacon = { rssi: 0 }
         $scope.$on("$ionicView.enter", function (scopes, states) {
             $scope.storageInit();
             getInventoryList();
@@ -33,7 +33,7 @@ angular.module('fyp.orderController', [])
                 if ($scope.currentUser.role == "Employee" || $scope.currentUser.role == "Admin") {
                     for (var i = 0; i < $scope.orderList.length; i++) {
                         $scope.orderList[i].orderTime = moment($scope.orderList[i].orderTime).format('MMMM Do YYYY, h:mm:ss a')
-                        if ($scope.orderList[i].orderStatus == "Pending") {
+                        if ($scope.orderList[i].orderStatus == "Pending" || $scope.orderList[i].orderStatus == "Processing") {
                             $scope.orderListForEmp.push($scope.orderList[i]);
                         }
                     }
@@ -77,8 +77,71 @@ angular.module('fyp.orderController', [])
                         function () { console.log("Scan complete"); resolve('success') },
                         function () { console.log("stopScan failed"); reject(new Error('something wrong')) }
                     );
-                }, 3000);
+                }, 1500);
             })
+        }
+
+        $scope.checkOut = function (history) {
+            console.log(history)
+            cordova.plugins.barcodeScanner.scan(
+                function (result) {
+                    console.log(result.text);
+                    if (history.orderId == result.text) {
+                        apiService.updateOrderStatus(result.text, "Finished").then(function (data) {
+                            swal({
+                                title: "Sccess !",
+                                // text: "Inventory has been created!",
+                                icon: "success",
+                            }).then((value) => {
+                                apiService.updateInventoryStatus(history.itemId, "Sold").then(function (data) {
+                                    location.reload();
+                                });
+                            });
+                        });
+                    } else {
+                        swal({
+                            title: "Oops !",
+                            text: "Wrong QR code scanned !",
+                            icon: "error",
+                        }).then((value) => {
+                            location.reload();
+                        });
+                    }
+                },
+                function (error) {
+                    console.log("Scanning failed: " + error);
+                }
+            );
+
+        }
+
+        $scope.getDistance = function (rssi) {
+            if (rssi == 0) {
+                return "Not detected"
+            } else
+                if (rssi > -50) {
+                    return "Very Close(<0.3M)"
+                } else
+                    if (rssi > -55) {
+                        return "Close(<0.6M)"
+                    } else
+                        if (rssi > -60) {
+                            return "Far(<1M)"
+                        } else
+                            if (rssi > -70) {
+                                return "Quite Far(<1.3M)"
+                            } else
+                                if (rssi > -80) {
+                                    return "Very Far(<1.6M)"
+                                } else
+                                    if (rssi > -90) {
+                                        return "Very Far(<2M)"
+                                    } else
+                                        if (rssi > -100) {
+                                            return "Extremely Far(<2.5M)"
+                                        } else {
+                                            return "Not detected"
+                                        }
         }
 
         $scope.startScanBeaconById = function (_id) {
@@ -89,6 +152,8 @@ angular.module('fyp.orderController', [])
                         // console.log(JSON.stringify(device));
                         if (_id == device.id) {
                             $scope.beacon = device
+                            $scope.distance = 10 ^ ((-81 - $scope.beacon.rssi) / (10 * 4.66))
+                            console.log($scope.distance)
                             console.log($scope.beacon.rssi)
                             $scope.$apply();
                         }
@@ -106,19 +171,19 @@ angular.module('fyp.orderController', [])
         $scope.startOrder = function (order) {
             console.log(JSON.stringify(order))
             $scope.orderInventory = {};
-            // apiService.updateOrderStatus(order.orderId, "Processing").then(function (data) {
-            // $scope.startScanBeacon().then(function (data) {
-            $scope.currentOrder = order;
-            $scope.openStartOrderModal();
-            for (var i = 0; i < $scope.inventoryList.length; i++) {
-                if ($scope.inventoryList[i].productId == order.productId) {
-                    $scope.orderInventory = $scope.inventoryList[i];
-                    $scope.startScanBeaconById($scope.inventoryList[i].beacon)
+            apiService.updateOrderStatus(order.orderId, "Processing").then(function (data) {
+                // $scope.startScanBeacon().then(function (data) {
+                $scope.currentOrder = order;
+                $scope.openStartOrderModal();
+                for (var i = 0; i < $scope.inventoryList.length; i++) {
+                    if ($scope.inventoryList[i].productId == order.productId) {
+                        $scope.orderInventory = $scope.inventoryList[i];
+                        $scope.startScanBeaconById($scope.inventoryList[i].beacon)
+                    }
                 }
-            }
-            // $scope.$apply();
-            // });
-            // })
+                // $scope.$apply();
+                // });
+            })
         }
 
 
@@ -175,6 +240,20 @@ angular.module('fyp.orderController', [])
             });
         }
 
+        $scope.cancelOrder = function (_history) {
+            console.log(_history)
+            apiService.updateOrderStatus(_history.orderId, "Cancelled").then(function (data) {
+                swal({
+                    title: "Sccess !",
+                    // text: "Inventory has been created!",
+                    icon: "success",
+                }).then((value) => {
+                    location.reload();
+                });
+            });
+
+        }
+
 
         $ionicModal.fromTemplateUrl('orderHistoryModal.html', {
             scope: $scope,
@@ -216,12 +295,14 @@ angular.module('fyp.orderController', [])
             // Execute action
             console.log("hidden event")
             clearInterval(scanInverval);
+            // location.reload();
         });
         // Execute action on remove modal
         $scope.$on('modal.removed', function () {
             // Execute action
             console.log("removed event")
             clearInterval(scanInverval);
+            // location.reload();
         });
 
         $ionicModal.fromTemplateUrl('waitForReceiveModal.html', {
@@ -255,9 +336,9 @@ angular.module('fyp.orderController', [])
             for (var i = 0; i < $scope.orderList.length; i++) {
 
                 if ($scope.orderList[i].userId == $scope.currentUser.userId) {
-                    // console.log($scope.orderList[i])
+                    console.log($scope.orderList[i])
                     for (var k = 0; k < $scope.inventoryList.length; k++) {
-                        if ($scope.inventoryList[k].productId == $scope.orderList[i].productId) {
+                        if ($scope.inventoryList[k].itemId == $scope.orderList[i].itemId) {
                             console.log($scope.orderList[i])
                             $scope.historyList.push(_.extend($scope.orderList[i], $scope.inventoryList[k]));
                             // $scope.historyList.push(_.extend($scope.inventoryList[k], $scope.orderList[i]));
@@ -281,29 +362,6 @@ angular.module('fyp.orderController', [])
 
             }
 
-
-            // orderHistoryPopupTemplate = '<div class="row inventory-item" ng-repeat="history in historyList track by $index">order# {{hisotry.orderId}}</div>'
-            // var orderHistoryPopup = $ionicPopup.show({
-            //     //templateUrl: 'templates/popup/inventory-popup.html',
-            //     template: orderHistoryPopupTemplate,
-            //     title: "Order History",
-            //     //subTitle: 'Subtitle',
-            //     scope: $scope,
-
-            //     buttons: [
-            //         { text: 'Cancel' }, {
-            //             text: '<b>order</b>',
-            //             type: 'button-positive',
-            //             onTap: function (e) {
-            //                 makeOrder(inventory.productId);
-            //             }
-            //         }
-            //     ]
-            // });
-
-            // orderHistoryPopup.then(function (res) {
-            //     console.log('Tapped!', res);
-            // });
         };
 
 
@@ -324,7 +382,7 @@ angular.module('fyp.orderController', [])
                         text: '<b>order</b>',
                         type: 'button-positive',
                         onTap: function (e) {
-                            makeOrder(inventory.productId);
+                            makeOrder(inventory.itemId, inventory.productId);
                         }
                     }
                 ]
@@ -372,13 +430,10 @@ angular.module('fyp.orderController', [])
             );
         }
 
-        $scope.checkOutOrder = function () {
-            $scope.startScan()
-        }
 
 
-        function makeOrder(productId) {
-            apiService.createOrder(productId, $scope.currentUser.userId).then(function (data) {
+        function makeOrder(itemId, productId) {
+            apiService.createOrder(itemId, productId, $scope.currentUser.userId).then(function (data) {
                 console.log("Success");
                 showSuccessAlert();
             });

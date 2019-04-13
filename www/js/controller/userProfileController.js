@@ -4,16 +4,16 @@ angular.module('fyp.userProfileController', [])
         $scope.userInfo = { username: '', password: '' };
         $scope.formUser = { username: '', password: '' };
         $scope.userList = [];
-        $scope.findUserId  ={id:''};
+        $scope.findUserId = { id: '' };
         $scope.testOrder = { orderId: '000001', itemId: '000001', productId: '000001', iName: 'testInventory', checkOutTime: '2019-01-25T13:00:00Z', status: 'Ready to be delivered', price: '30', quantity: '4' }
-        $scope.createUserform = {username:'',password:'',rePassword:'',email:'',role:''};
-        $scope.editUserform = {username:'',oldPassword:'',newPassword:'',reNewRpassword:'',email:''};
-        
-        $scope.$on( "$ionicView.beforeEnter", function( scopes, states ) {
+        $scope.createUserform = { username: '', password: '', rePassword: '', email: '', role: '' };
+        $scope.editUserform = { username: '', oldPassword: '', newPassword: '', reNewRpassword: '', email: '' };
+
+        $scope.$on("$ionicView.beforeEnter", function (scopes, states) {
             $scope.storageInit();
             getUserList();
         });
-        
+
         function getUserList() {
             apiService.getUserList().then(function (data) {
                 $scope.userList = data;
@@ -22,12 +22,12 @@ angular.module('fyp.userProfileController', [])
             });
         }
 
-        $scope.findUser = function(){
+        $scope.findUser = function () {
             userPopupTemplate = '<div class="list">' +
                 '<label class="item item-input item-stacked-label" style="border: 0">' +
                 '<input type="text" ng-model="findUserId.id" placeholder="">' +
                 '</label>'
-                '</div>'
+            '</div>'
             var findUserPopup = $ionicPopup.show({
                 template: userPopupTemplate,
                 title: "Enter User Id",
@@ -67,16 +67,108 @@ angular.module('fyp.userProfileController', [])
             $state.go('tab.login');
         }
 
-        $scope.resetEditUserForm = function(){
-            $scope.editUserform = {username:'',oldPassword:'',newPassword:'',reNewRpassword:'',email:''};
+        $scope.resetEditUserForm = function () {
+            $scope.editUserform = { username: '', oldPassword: '', newPassword: '', reNewRpassword: '', email: '' };
             $scope.editUserform.username = $scope.currentUser.username;
             $scope.editUserform.email = $scope.currentUser.email;
         }
 
-        $scope.submitEditUserForm = function(){
-            apiService.updateUser($scope.currentUser.userId, $scope.editUserform).then(function (data) {
-                location.reload();
-            });
+        function checkEditValid() {
+            if ($scope.editUserform.newPassword != $scope.editUserform.reNewRpassword) {
+                swal({
+                    title: "Oops !",
+                    text: "Two passwords are not matched !",
+                    icon: "error",
+                }).then((value) => {
+
+                });
+                return false;
+            }
+
+            if ($scope.editUserform.newPassword.length < 5 && $scope.editUserform.newPassword.length > 0) {
+                swal({
+                    title: "Oops !",
+                    text: "Password must be more than 5 characters!",
+                    icon: "error",
+                }).then((value) => {
+
+                });
+                return false;
+            }
+
+            if ($scope.editUserform.username.length < 5) {
+                swal({
+                    title: "Oops !",
+                    text: "Username must be more than 5 characters!",
+                    icon: "error",
+                }).then((value) => {
+
+                });
+                return false;
+            }
+
+            for (var i = 0; i < $scope.userList.length; i++) {
+                if ($scope.editUserform.username == $scope.userList[i].username && $scope.editUserform.password != $scope.userList[i].password ) {
+                    console.log($scope.userList[i].password)
+                    swal({
+                        title: "Oops !",
+                        text: "Password is not correct !",
+                        icon: "error",
+                    }).then((value) => {
+
+                    });
+                    return false;
+                }
+
+                if ($scope.editUserform.username == $scope.userList[i].username && $scope.editUserform.userId != $scope.userList[i].userId) {
+                    swal({
+                        title: "Oops !",
+                        text: "Username has already been used !",
+                        icon: "error",
+                    }).then((value) => {
+
+                    });
+                    return false;
+                }
+                if ($scope.editUserform.email == $scope.userList[i].email && $scope.editUserform.userId != $scope.userList[i].userId) {
+                    swal({
+                        title: "Oops !",
+                        text: "Email has already been used !",
+                        icon: "error",
+                    }).then((value) => {
+
+                    });
+                    return false;
+                }
+                if ($scope.editUserform.phone == $scope.userList[i].phone && $scope.editUserform.userId != $scope.userList[i].userId) {
+                    swal({
+                        title: "Oops !",
+                        text: "Phone number has already been used !",
+                        icon: "error",
+                    }).then((value) => {
+
+                    });
+                    return false;
+                }
+            }
+
+            return true;
+
+        }
+
+
+        $scope.submitEditUserForm = function () {
+            // if (checkEditValid() == true) {
+                apiService.updateUser($scope.currentUser.userId, $scope.editUserform).then(function (data) {
+                    swal({
+                        title: "Success !",
+                        // text: "Autom!",
+                        icon: "success",
+                    }).then((value) => {
+                        $scope.logout()
+                    });
+                });
+            // }    
 
         }
 
@@ -110,16 +202,16 @@ angular.module('fyp.userProfileController', [])
                 '<span class="input-label">Phone</span>' +
                 '<input type="text" ng-model="createUserform.phone" placeholder="Phone number">' +
                 '</label>' +
-                '<label class="item item-input item-select">'+
-                '<div class="input-label">'+
-                'Role'+
-                '</div>'+
-                '<select ng-model="createUserform.role">'+
-                '<option ng-value="Admin">Admin</option>'+
-                '<option ng-value="Employee">Employee</option>'+
-                '<option ng-value="Customer">Customer</option>'+
-                '</select>'+
-                '</label>'+
+                '<label class="item item-input item-select">' +
+                '<div class="input-label">' +
+                'Role' +
+                '</div>' +
+                '<select ng-model="createUserform.role">' +
+                '<option ng-value="Admin">Admin</option>' +
+                '<option ng-value="Employee">Employee</option>' +
+                '<option ng-value="Customer">Customer</option>' +
+                '</select>' +
+                '</label>' +
                 '</div>'
             var myPopup = $ionicPopup.show({
                 template: userPopupTemplate,
@@ -163,7 +255,7 @@ angular.module('fyp.userProfileController', [])
                         type: 'button-positive',
                         onTap: function (e) {
                             var deleteConfirmPopup = $ionicPopup.confirm({
-                                title: 'Are you sure to delete user '+user.username+' ?',
+                                title: 'Are you sure to delete user ' + user.username + ' ?',
                                 buttons: [
                                     { text: 'Cancel' }, {
                                         text: '<b>Confirm</b>',

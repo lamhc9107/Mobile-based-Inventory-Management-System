@@ -20,18 +20,18 @@ angular.module('fyp.messageController', [])
             getUserList();
         });
 
-        function getLatestMessageWithinChat(_messageId){
+        function getLatestMessageWithinChat(_messageId) {
             var temp = [];
-            var tempStack =0;
-            var highestStack={};
-            for(var i = 0; i< $scope.messageList.length ; i++){
-                if($scope.messageList[i].messageId == _messageId){
+            var tempStack = 0;
+            var highestStack = {};
+            for (var i = 0; i < $scope.messageList.length; i++) {
+                if ($scope.messageList[i].messageId == _messageId) {
                     temp.push($scope.messageList[i])
                 }
             }
 
-            for(var i = 0; i< temp.length ; i++){
-                if(temp.stack > tempStack){
+            for (var i = 0; i < temp.length; i++) {
+                if (temp.stack > tempStack) {
                     highestStack = temp[i];
                     tempStack = temp[i].stack
                 }
@@ -104,20 +104,50 @@ angular.module('fyp.messageController', [])
             $scope.currentChatList = [];
             $scope.currentChatList.push(message);
             for (var i = 0; i < $scope.messageList.length; i++) {
-                if($scope.messageList[i].refId==message.messageId){
+                if ($scope.messageList[i].refId == message.messageId) {
                     $scope.currentChatList.push($scope.messageList[i]);
                 }
             }
             console.log($scope.currentChatList)
-            console.log(_.max($scope.currentChatList, function(stooge){ return stooge.stack})); 
+            console.log(_.max($scope.currentChatList, function (stooge) { return stooge.stack }));
             $scope.openMessageDetailModal();
         }
 
-        $scope.replyMessage = function(){
+        $scope.showOrderDetails = function () {
+            console.log($scope.currentChat.orderId)
+            $scope.orderList.forEach(function (order) {         
+                if (order.orderId == $scope.currentChat.orderId) {
+                    console.log(order)
+                    swal({
+                        title: "Success !",
+                        text: order.iName,
+                        icon: "success",
+                    }).then((value) => {
+                    });
+                }
+            })
+        }
+
+        $scope.getOrderById = function (_orderId) {
+            $scope.orderList.forEach(function (order) {         
+                if (order.orderId == _orderId) {
+                    console.log(order)
+                    return order;
+                }
+            })
+        }
+
+        $scope.replyMessage = function () {
 
             console.log($scope.currentChat)
-            apiService.replyMessage($scope.newMessageObj.message, _.max($scope.currentChatList, function(stooge){ return stooge.stack; }).stack +1,$scope.currentUser.userId,$scope.currentChat.messageId, "").then(function (data) {
-
+            apiService.replyMessage($scope.newMessageObj.message, _.max($scope.currentChatList, function (stooge) { return stooge.stack; }).stack + 1, $scope.currentUser.userId, $scope.currentChat.messageId, "").then(function (data) {
+                swal({
+                    title: "Success !",
+                    // text: "Inventory has successfully deleted !",
+                    icon: "success",
+                }).then((value) => {
+                    location.reload();
+                });
             });
         }
 
@@ -145,7 +175,14 @@ angular.module('fyp.messageController', [])
 
         $scope.sendMessage = function () {
             console.log($scope.newMessageObj);
-            apiService.createMessage($scope.newMessageObj.message, $scope.newMessageObj.orderId, $scope.currentUser.userId).then(function (data) {
+            apiService.createMessage($scope.newMessageObj.title, $scope.newMessageObj.message, $scope.newMessageObj.orderId, $scope.currentUser.userId).then(function (data) {
+                swal({
+                    title: "Success !",
+                    // text: "Inventory has successfully deleted !",
+                    icon: "success",
+                }).then((value) => {
+                    location.reload();
+                });
             });
         }
 
@@ -181,6 +218,10 @@ angular.module('fyp.messageController', [])
         //Cleanup the modal when we're done with it!
         $scope.$on('$destroy', function () {
             $scope.messageDetailModal.remove();
+        });
+        $scope.$on('modal.hidden', function () {
+            // Execute action
+            getMessageList();
         });
 
         $scope.showUserPopup = function (user) {

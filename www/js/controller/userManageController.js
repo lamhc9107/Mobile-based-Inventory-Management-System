@@ -36,10 +36,10 @@ angular.module('fyp.userManageController', [])
         }).then(function (editUserModal) {
             $scope.editUserModal = editUserModal;
         });
-        $scope.openEditUserModalModal = function () {
+        $scope.openEditUserModal = function () {
             $scope.editUserModal.show();
         };
-        $scope.closeEditUserModalModal = function () {
+        $scope.closeEditUserModal = function () {
             $scope.editUserModal.hide();
         };
         //Cleanup the modal when we're done with it!
@@ -113,23 +113,23 @@ angular.module('fyp.userManageController', [])
             userPopupTemplate = '<div class="list">' +
                 '<label class="item item-input item-stacked-label">' +
                 '<span class="input-label">Username</span>' +
-                '<input type="text" ng-model="createUserform.username" placeholder="5 characters or more">' +
+                '<input type="text" ng-model="createUserform.username" placeholder="5 characters or more" required>' +
                 '</label>' +
                 '<label class="item item-input item-stacked-label">' +
                 '<span class="input-label">Password</span>' +
-                '<input type="password" ng-model="createUserform.password" placeholder="5 characters or more">' +
+                '<input type="password" ng-model="createUserform.password" placeholder="5 characters or more" required>' +
                 '</label>' +
                 '<label class="item item-input item-stacked-label">' +
                 '<span class="input-label">Re-enter password</span>' +
-                '<input type="password" ng-model="createUserform.rePassword" placeholder="">' +
+                '<input type="password" ng-model="createUserform.rePassword" placeholder="" required>' +
                 '</label>' +
                 '<label class="item item-input item-stacked-label">' +
                 '<span class="input-label">Email</span>' +
-                '<input type="email" ng-model="createUserform.email" placeholder="Email address">' +
+                '<input type="email" ng-model="createUserform.email" placeholder="Email address" required>' +
                 '</label>' +
                 '<label class="item item-input item-stacked-label">' +
                 '<span class="input-label">Phone</span>' +
-                '<input type="text" ng-model="createUserform.phone" placeholder="Phone number">' +
+                '<input type="number" ng-model="createUserform.phone" placeholder="Phone number" required>' +
                 '</label>' +
                 '<label class="item item-input item-select">' +
                 '<div class="input-label">' +
@@ -153,14 +153,77 @@ angular.module('fyp.userManageController', [])
                         text: '<b>Submit</b>',
                         type: 'button-positive',
                         onTap: function (e) {
-                            console.log($scope.createUserform);
+                            console.log(_.values($scope.createUserform));
+                            _.values($scope.createUserform).forEach(function(element){
+                                if (element=="" || element==null ||element==undefined) {
+                                    invaildDesc = "All fields are required!"
+                                    swal({
+                                        title: "Oops !",
+                                        text: invaildDesc,
+                                        icon: "error",
+                                    }).then((value) => {
+                                        
+                                    });
+                                    return;
+                                }
+
+                            })
                             if ($scope.createUserform.password != $scope.createUserform.rePassword) {
                                 invaildDesc = "Passwords are not matched ! Please enter again !"
-                                var loginInvaildPopup = $ionicPopup.confirm({
-                                    title: 'Invaild password !',
-                                    template: invaildDesc
+                                swal({
+                                    title: "Oops !",
+                                    text: invaildDesc,
+                                    icon: "error",
+                                }).then((value) => {
+                                    
                                 });
                                 return;
+                            }
+                
+                
+                            if ($scope.createUserform.username.length < 5 ) {
+                                swal({
+                                    title: "Oops !",
+                                    text: "Username must be more than 5 characters!",
+                                    icon: "error",
+                                }).then((value) => {
+                                    
+                                });
+                                return;
+                            }
+                
+                            for (var i = 0; i < $scope.userList.length; i++) {
+                
+                                if ($scope.createUserform.username == $scope.userList[i].username) {
+                                    swal({
+                                        title: "Oops !",
+                                        text: "Username has already been used !",
+                                        icon: "error",
+                                    }).then((value) => {
+                                        
+                                    });
+                                    return;
+                                }
+                                if ($scope.createUserform.email == $scope.userList[i].email) {
+                                    swal({
+                                        title: "Oops !",
+                                        text: "Email has already been used !",
+                                        icon: "error",
+                                    }).then((value) => {
+                                        
+                                    });
+                                    return;
+                                }
+                                if ($scope.createUserform.phone == $scope.userList[i].phone) {
+                                    swal({
+                                        title: "Oops !",
+                                        text: "Phone number has already been used !",
+                                        icon: "error",
+                                    }).then((value) => {
+                                        
+                                    });
+                                    return ;
+                                }
                             }
                             apiService.createNewUser($scope.createUserform).then(function (data) {
                                 swal({
@@ -197,7 +260,7 @@ angular.module('fyp.userManageController', [])
                         type: 'button-positive',
                         onTap: function (e) {
                             $scope.editUserform = _.extend(user, { newPassword: '', rePassword: '' });;
-                            $scope.openEditUserModalModal();
+                            $scope.openEditUserModal();
                         }
                     }
                 ]
@@ -259,6 +322,17 @@ angular.module('fyp.userManageController', [])
                 swal({
                     title: "Oops !",
                     text: "Username must be more than 5 characters!",
+                    icon: "error",
+                }).then((value) => {
+                    
+                });
+                return false;
+            }
+
+            if ($scope.editUserform.email==undefined ) {
+                swal({
+                    title: "Oops !",
+                    text: "Invalid Email!",
                     icon: "error",
                 }).then((value) => {
                     

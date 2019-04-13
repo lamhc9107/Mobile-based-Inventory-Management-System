@@ -1,5 +1,5 @@
 <ion-view view-title="InvenManage" hide-nav-bar='true'>
-  <ion-content>
+  <ion-content scroll='false'>
     <div class="title-bar" id="inventory-management-card">Inventory Management
       <span class="back-button" ng-click="back()">
         <i class="fas fa-chevron-left"></i> Back</span>
@@ -7,15 +7,15 @@
     <div class="button-group">
       <div class="row employeeOnlyFunction">
         <div class="col">
-          <button class="button button-calm centered" style="width: 90%;" ng-click="showCreateInventoryPopup()">
+          <button class="button button-calm centered" style="width: 90%; font-size: 1em" ng-click="showCreateInventoryPopup()">
             Create Inventory
           </button>
         </div>
-        <div class="col">
-          <button class="button button-calm centered" style="width: 90%;" ng-click="showDeleteInventoryPopup()">
+        <!-- <div class="col">
+          <button class="button button-calm centered" style="width: 90%; font-size: 1em" ng-click="showDeleteInventoryPopup()">
             Delete Inventory
           </button>
-        </div>
+        </div> -->
       </div>
 
       <div class="row">
@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <div class="list-area centered">
+      <div class="list-area centered" style='min-height: 390px !important '>
         <div class="row" style="font-weight:bold; background: #1176f3; color: white">
           <div class='col'>Inventory</div>
           <div class='col'>Status</div>
@@ -44,7 +44,7 @@
         </div>
           <!-- <div class='col'></div> -->
         </div>
-        <div class="scroll-area">
+        <ion-scroll>
           <div class="row inventory-item" ng-repeat="inventory in showInventoryList track by $index">
             <div class="row">
               <div class='col'>{{inventory.iName}}</div>
@@ -63,7 +63,7 @@
             </div> -->
             </div>
           </div>
-        </div>
+        </ion-scroll>
       </div>
 
     </div>
@@ -103,6 +103,38 @@
             </div>
         </ion-content>
       </ion-modal-view>
+    </script>
+
+    <script id="editInventoryModal.html" type="text/ng-template">
+      <ion-modal-view style="min-height: 65%;">
+          <ion-header-bar>
+            <h1 class="title" style='background:#387ef5; color: white; margin: 0; padding-left: 3%;'>Edit Inventory</h1>
+          </ion-header-bar>
+          <ion-content style='top: 8% !important;'>
+                <div class="list">
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">Beacon <button class="button button-outline button-positive tight-line-button"ng-click='scanBeaconQR()'>Scan</button>
+                        </span>
+                        <input type="text" ng-model="editInventoryform.beacon" placeholder="">
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">Inventroy Name</span>
+                        <input type="text" ng-model="editInventoryform.iName" placeholder="">
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">Price</span>
+                        <input type="text" ng-model="editInventoryform.price" placeholder="">
+                        </label>
+                        <label class="item item-input item-stacked-label">
+                        <span class="input-label">location</span>
+                        <input type="text" ng-model="editInventoryform.location" placeholder="">
+                        </label>
+                        <button class="button button-positive" style='display: block;float: right;margin: 3%;' ng-click="submitInventoryEdit()">Submit</button>
+                        <button class="button button-positive" style='display: block;float: right;margin: 3%;' ng-click="deleteInventoryAlert(editInventoryform.itemId)">Delete</button>
+                        <button class="button button-stable" style='display: block;float: right;margin: 3%;' ng-click="closeEditInventoryModal()">Cancel</button>
+                        
+          </ion-content>
+        </ion-modal-view>
     </script>
     
 

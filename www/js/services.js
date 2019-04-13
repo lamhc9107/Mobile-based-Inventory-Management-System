@@ -106,7 +106,7 @@ angular.module('fyp.services', [])
       deleteUser: function (_userId) {
         console.log(_userId);
         return db.collection("users").doc(_userId).delete().then(function () {
-          return console.log(_userId +"successfully deleted!");
+          return console.log(_userId + "successfully deleted!");
         }).catch(function (error) {
           return console.error("Error removing document: ", error);
         });
@@ -205,6 +205,7 @@ angular.module('fyp.services', [])
           price: createInventoryform.price,
           checkInTime: moment().format(),
           location: createInventoryform.location,
+          beacon: createInventoryform.beacon,
           status: "Available"
         })
           .then(function (docRef) {
@@ -235,29 +236,46 @@ angular.module('fyp.services', [])
 
         // })
       },
-      deleteItem: function (_itemId) {
-        console.log(_itemId);
-        return $http({
-          method: "DELETE",
-          url: apiUrl + "inventories",
-          // withCredentials: true,
-          data: {
-            userId: Number(_itemId),
-          },
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-          }
-        }).then(function mySucces(response) {
-          // console.log(response);
-          return response;
-        }, function myError(response) {
+      updateInventory: function (_editInventoryform) {
+        var data;
 
-        })
+        if (_editInventoryform.beacon == "" || _editInventoryform.beacon == null) {
+          data = {
+            beacon: "",
+            iName: _editInventoryform.iName,
+            price: _editInventoryform.price,
+            location: _editInventoryform.location,
+          }
+        } else {
+          data = {
+            beacon: _editInventoryform.beacon,
+            iName: _editInventoryform.iName,
+            price: _editInventoryform.price,
+            location: _editInventoryform.location,
+          }
+        }
+
+
+
+        return db.collection("inventories").doc(_editInventoryform.itemId).update(data)
+          .then(function () {
+            return console.log("itemId: " + _editInventoryform.itemId + " edited!");
+          });
       },
 
-      createOrder: function (_productId, _userId) {
+      deleteItem: function (_itemId) {
+        console.log(_itemId);
+        return db.collection("inventories").doc(_itemId).delete().then(function () {
+          return console.log(_itemId + "successfully deleted!");
+        }).catch(function (error) {
+          return console.error("Error removing document: ", error);
+        });
+      },
+
+      createOrder: function (_itemId,_productId, _userId) {
         console.log("productId: " + _productId + " userId: " + _userId)
         return db.collection("orders").add({
+          itemId: _itemId,
           productId: _productId,
           userId: _userId,
           orderTime: moment().format(),
@@ -312,8 +330,9 @@ angular.module('fyp.services', [])
           return data;
         });
       },
-      createMessage: function (_message, _orderId, _userId) {
+      createMessage: function (_title,_message, _orderId, _userId) {
         return db.collection("messages").add({
+          title: _title,
           content: _message,
           orderId: _orderId,
           messageTime: moment().format(),
@@ -327,6 +346,7 @@ angular.module('fyp.services', [])
       },
       replyMessage: function (_message, _stack, _userId, _refId, _orderId) {
         return db.collection("messages").add({
+          title: "",
           content: _message,
           orderId: _orderId,
           messageTime: moment().format(),
@@ -336,6 +356,17 @@ angular.module('fyp.services', [])
         })
           .then(function (docRef) {
             return console.log("message: " + docRef.id + " created!");
+          });
+      },
+      updateInventoryStatus: function (_itemId, _status) {
+        var data;
+        data = {
+          status: _status,
+        }
+
+        return db.collection("inventories").doc(_itemId).update(data)
+          .then(function () {
+            return console.log("itemId: " + _itemId + " edited!");
           });
       },
 
